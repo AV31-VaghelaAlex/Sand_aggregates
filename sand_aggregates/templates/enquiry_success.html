@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Enquiry Received | {{ site_settings.business_name }}{% endblock %}
+
+{% block content %}
+<section style="padding: var(--space-6) 0;">
+  <div class="container">
+    <div class="success-card">
+      <div class="success-icon">
+        <i class="fa-solid fa-envelope-circle-check"></i>
+      </div>
+
+      <span class="section-kicker" style="color: var(--success); font-weight: 700;">Enquiry Submitted</span>
+      <h1 style="font-size: clamp(1.8rem, 3.5vw, 2.3rem); margin: 8px 0;">Thank you. Your enquiry has been submitted successfully.</h1>
+      <p style="color: var(--stone); font-size: 1.05rem; margin: 0 auto var(--space-4);">
+        {% if enquiry %}
+          Thank you, <strong>{{ enquiry.name }}</strong>. We have received your inquiry for <strong>{% if enquiry.product %}{{ enquiry.product.name }}{% else %}{{ enquiry.product_name|default:"construction materials" }}{% endif %}</strong>. Our commercial team will evaluate delivery logistics and contact you on <strong>{{ enquiry.phone }}</strong> shortly.
+        {% else %}
+          We have received your quotation request. Our commercial team will review your specifications and contact you shortly.
+        {% endif %}
+      </p>
+
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: var(--space-4);">
+        <a href="{{ whatsapp_url }}" target="_blank" rel="noopener" class="btn btn-whatsapp btn-lg">
+          <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+        </a>
+        <a href="{% url 'website:products' %}" class="btn btn-outline btn-lg">
+          <i class="fa-solid fa-cubes"></i> Explore Products
+        </a>
+        <a href="{% url 'website:home' %}" class="btn btn-accent btn-lg">
+          <i class="fa-solid fa-house"></i> Return to Homepage
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

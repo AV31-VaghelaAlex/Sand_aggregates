@@ -1,0 +1,360 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ site_settings.business_name }} | Quality Sand & Aggregates Supplier{% endblock %}
+
+{% block content %}
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <p class="hero-kicker"><i class="fa-solid fa-truck-fast"></i> Premium Sand &amp; Aggregate Supply</p>
+      <h1>STRONG BASE.<br><span style="color:var(--sand);">STRONGER TOMORROW.</span></h1>
+      <p class="hero-sub">Premium quality sand and aggregate for every construction need — residential, commercial, roadwork, and infrastructure projects.</p>
+      <div class="hero-actions">
+        <a href="{% url 'website:order_create' %}" class="btn btn-accent">
+          <i class="fa-solid fa-cart-flatbed"></i> Order Online
+        </a>
+        <a href="#enquiry" class="btn btn-outline-light">
+          <i class="fa-solid fa-envelope-open-text"></i> Get a Quote
+        </a>
+        <a href="tel:{{ site_settings.phone_raw }}" class="btn btn-outline-light" id="hero-call">
+          <i class="fa-solid fa-phone"></i> Call Now
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="{% static 'assets/hero.jpeg' %}" alt="LJ Enterprise commercial truck and material stockpiles" width="800" height="600" loading="eager" onerror="this.parentElement.classList.add('img-fallback')">
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST / HIGHLIGHT STRIP ============ -->
+<section class="highlight-strip">
+  <div class="container highlight-grid">
+    <div class="highlight-card">
+      <h3><i class="fa-solid fa-award"></i> Premium Quality</h3>
+      <p>Carefully sourced, tested, and lab-certified materials for maximum bonding.</p>
+    </div>
+    <div class="highlight-card">
+      <h3><i class="fa-solid fa-truck-fast"></i> Timely Delivery</h3>
+      <p>Punctual 24/7 dedicated fleet dispatch ensuring zero project downtime.</p>
+    </div>
+    <div class="highlight-card">
+      <h3><i class="fa-solid fa-handshake"></i> Fair Price</h3>
+      <p>Value-focused wholesale direct pricing for builders and contractors.</p>
+    </div>
+    <div class="highlight-card">
+      <h3><i class="fa-solid fa-headset"></i> Customer First</h3>
+      <p>Instant phone and WhatsApp assistance for rapid custom quotations.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="about" id="about">
+  <div class="container about-inner">
+    <div class="about-visual">
+      <img src="{% static 'assets/hero.jpeg' %}" alt="Sand and aggregates supply yard" width="800" height="600" loading="lazy" onerror="this.parentElement.classList.add('img-fallback')">
+    </div>
+    <div class="about-copy">
+      <span class="section-kicker">About Us</span>
+      <div style="margin-bottom: 10px;">
+        <span class="badge-status delivered" style="font-size: 0.82rem; padding: 4px 10px; font-weight: 700;">
+          <i class="fa-solid fa-clock"></i> {{ site_settings.business_hours }}
+        </span>
+        <span class="badge-status confirmed" style="font-size: 0.82rem; padding: 4px 10px; font-weight: 700; margin-left: 6px;">
+          <i class="fa-solid fa-building"></i> Construction Company
+        </span>
+      </div>
+      <h2>Solid foundations start with quality materials</h2>
+      <p>At the heart of every strong structure lies a solid foundation — and that starts with quality materials. <strong>{{ site_settings.business_name }}</strong> specializes in the supply of premium <strong>Sand, Granular Sub Base (GSB), and Aggregates</strong> for a wide range of infrastructure, roadwork, and construction projects across <strong>{{ site_settings.address }} & nearby regions</strong>.</p>
+      <p>Whether you require bulk load deliveries for highways or ongoing supply for residential and commercial builds, our fleet ensures dependable, on-time site arrival 24/7.</p>
+      <ul class="about-points">
+        <li>Lab-certified, clean, and silt-controlled sand materials</li>
+        <li>Angular crushed stone aggregates tested for flakiness and durability</li>
+        <li>Instant online ordering and direct WhatsApp consultation</li>
+      </ul>
+      <div class="about-contact">
+        <a href="tel:{{ site_settings.phone_raw }}"><i class="fa-solid fa-phone"></i> {{ site_settings.phone_display }}</a>
+        <span aria-hidden="true" style="color:var(--stone);">·</span>
+        <a href="mailto:{{ site_settings.email }}"><i class="fa-solid fa-envelope"></i> {{ site_settings.email }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRODUCTS (DYNAMIC DATABASE-DRIVEN) ============ -->
+<section class="products" id="products">
+  <div class="container">
+    <div class="section-head" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <span class="section-kicker">Materials We Supply</span>
+        <h2>High-grade sand & aggregates</h2>
+        <p class="section-sub">Live database pricing and real-time inventory for construction, plastering, and infrastructure.</p>
+      </div>
+      <div>
+        <a href="{% url 'website:products' %}" class="btn btn-outline btn-sm">
+          View All Materials <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="product-grid" id="product-grid">
+      {% for product in featured_products %}
+        <article class="product-card" data-product="{{ product.name }}">
+          <div class="product-card-img-wrap">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+            {% else %}
+              <img src="{% static 'assets/hero.jpeg' %}" alt="{{ product.name }}" loading="lazy" onerror="this.parentElement.classList.add('img-fallback')">
+            {% endif %}
+            
+            {% if product.featured %}
+              <span class="badge-featured">Featured</span>
+            {% endif %}
+            
+            {% if product.available %}
+              <span class="badge-available"><i class="fa-solid fa-check"></i> In Stock</span>
+            {% else %}
+              <span class="badge-unavailable"><i class="fa-solid fa-xmark"></i> Out of Stock</span>
+            {% endif %}
+          </div>
+
+          <div class="product-body">
+            {% if product.category %}
+              <span class="product-category">{{ product.category.name }}</span>
+            {% endif %}
+            <h3><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
+            <p>{{ product.short_description }}</p>
+            
+            <div class="product-price-bar">
+              <span class="price-tag">{{ product.formatted_price }}</span>
+              <span class="price-unit">per {{ product.unit }}</span>
+            </div>
+
+            <div class="product-actions">
+              <a href="{% url 'website:order_create_product' product.slug %}" class="btn btn-accent btn-sm">
+                <i class="fa-solid fa-cart-plus"></i> Order
+              </a>
+              <button type="button" class="btn btn-outline btn-sm enquire-btn" data-product="{{ product.name }}">
+                <i class="fa-regular fa-comment-dots"></i> Enquire
+              </button>
+            </div>
+          </div>
+        </article>
+      {% empty %}
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+          <p>No products currently available. Please contact us directly.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY CHOOSE US ============ -->
+<section class="why-us" id="why-us">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-kicker" style="color:var(--sand);">Why Choose Us</span>
+      <h2>Built around what your project needs</h2>
+      <p class="section-sub">We combine high quality natural & manufactured aggregate supply with professional service.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <h3><i class="fa-solid fa-handshake-angle"></i> Built on Trust</h3>
+        <p>Honest weighbridge verification, certified material grading, and fair pricing on every dumper load.</p>
+      </div>
+      <div class="why-card">
+        <h3><i class="fa-solid fa-city"></i> Stronger Together</h3>
+        <p>Partnering with builders, civil contractors, and infrastructure developers to construct enduring landmarks.</p>
+      </div>
+      <div class="why-card">
+        <h3><i class="fa-solid fa-bullseye"></i> Committed to Excellence</h3>
+        <p>Strict quality standards ensuring higher compressive strength, superior concrete binding, and long durability.</p>
+      </div>
+      <div class="why-card">
+        <h3><i class="fa-solid fa-truck-fast"></i> 24/7 Fleet Dispatch</h3>
+        <p>Open 24 hours with dedicated heavy-duty dumper transit ensuring zero work halt at your construction site.</p>
+      </div>
+      <div class="why-card">
+        <h3><i class="fa-solid fa-layer-group"></i> Complete Material Range</h3>
+        <p>Fine Sand, Coarse Sand, Banas Sand, Zone 2, 10/20/40mm stone aggregates, and Granular Sub Base (GSB).</p>
+      </div>
+      <div class="why-card">
+        <h3><i class="fa-brands fa-whatsapp"></i> Instant Quotations</h3>
+        <p>Connect directly via phone or WhatsApp for immediate commercial project quotations and delivery schedules.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHO WE SERVE ============ -->
+<section class="who-we-serve">
+  <div class="container">
+    <div class="section-head" style="text-align: center; margin: 0 auto var(--space-4);">
+      <span class="section-kicker">Who We Serve</span>
+      <h2>Materials for every kind of project</h2>
+    </div>
+    <div class="serve-grid">
+      <div class="serve-card"><i class="fa-solid fa-trowel-bricks"></i> Builders & Promoters</div>
+      <div class="serve-card"><i class="fa-solid fa-helmet-safety"></i> Civil Contractors</div>
+      <div class="serve-card"><i class="fa-solid fa-building"></i> Construction Companies</div>
+      <div class="serve-card"><i class="fa-solid fa-road"></i> Infrastructure Developers</div>
+      <div class="serve-card"><i class="fa-solid fa-industry"></i> RMC Batching Plants</div>
+      <div class="serve-card"><i class="fa-solid fa-house-chimney"></i> Individual Home Builders</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA SECTION ============ -->
+<section class="cta-section">
+  <div class="container cta-inner">
+    <h2>BETTER MATERIAL. BETTER CONSTRUCTION. BETTER TOMORROW.</h2>
+    <p style="font-size:1.15rem; font-weight:600; color:var(--white); margin-bottom:8px;">LET'S BUILD SOMETHING GREAT TOGETHER!</p>
+    <p>Tell us what material and quantity you need. Our logistics team operates 24/7 across Ahmedabad and Gujarat.</p>
+    <div class="cta-actions">
+      <a href="{% url 'website:order_create' %}" class="btn btn-accent">
+        <i class="fa-solid fa-cart-shopping"></i> Place Order Online
+      </a>
+      <a href="#enquiry" class="btn btn-outline-light">
+        <i class="fa-solid fa-paper-plane"></i> Request a Quote
+      </a>
+      <a href="{{ whatsapp_url }}" class="btn btn-whatsapp" target="_blank" rel="noopener">
+        <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT & ENQUIRY SECTION ============ -->
+<section class="contact" id="contact">
+  <div class="container contact-inner">
+    <div class="contact-details">
+      <span class="section-kicker">Contact Us</span>
+      <h2>Get in touch</h2>
+      <p style="color:var(--stone); margin-bottom: 20px;">Reach out for immediate material quotations, delivery tracking, or site inspection queries.</p>
+
+      <ul class="contact-list">
+        <li>
+          <span class="contact-label"><i class="fa-solid fa-phone"></i> Phone</span>
+          <a href="tel:{{ site_settings.phone_raw }}"><strong>{{ site_settings.phone_display }}</strong></a>
+        </li>
+        <li>
+          <span class="contact-label"><i class="fa-brands fa-whatsapp" style="color:#25D366;"></i> WhatsApp</span>
+          <a href="{{ whatsapp_url }}" target="_blank" rel="noopener"><strong>{{ site_settings.whatsapp_number }}</strong></a>
+        </li>
+        <li>
+          <span class="contact-label"><i class="fa-solid fa-envelope"></i> Email</span>
+          <a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a>
+        </li>
+        <li>
+          <span class="contact-label"><i class="fa-solid fa-location-dot"></i> Yard Address</span>
+          <span>{{ site_settings.address }}</span>
+        </li>
+        <li>
+          <span class="contact-label"><i class="fa-solid fa-clock"></i> Working Hours</span>
+          <span>{{ site_settings.business_hours }}</span>
+        </li>
+      </ul>
+
+      <!-- Google Maps Embed -->
+      {% if site_settings.google_maps_url %}
+      <div class="map-embed">
+        <iframe
+          id="map-frame"
+          src="{{ site_settings.google_maps_url }}"
+          width="100%" height="260" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Business location map">
+        </iframe>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- ============ DYNAMIC ENQUIRY FORM ============ -->
+    <div class="enquiry-wrap" id="enquiry">
+      <span class="section-kicker">Get a Quote</span>
+      <h2>Send an enquiry</h2>
+      <p class="section-sub">Fill in your requirements below and our team will reply promptly with pricing and dispatch availability.</p>
+
+      <form method="POST" action="{% url 'website:home' %}#enquiry" novalidate>
+        {% csrf_token %}
+
+        {% if enquiry_form.non_field_errors %}
+          <div class="alert-box error" style="margin-bottom:12px;">
+            {{ enquiry_form.non_field_errors }}
+          </div>
+        {% endif %}
+
+        <div class="form-row">
+          <label for="f-name">Full Name <span style="color:var(--accent);">*</span></label>
+          {{ enquiry_form.name }}
+          {% if enquiry_form.name.errors %}
+            <span class="field-error">{{ enquiry_form.name.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <div class="form-row">
+          <label for="f-mobile">Mobile Number <span style="color:var(--accent);">*</span></label>
+          {{ enquiry_form.phone }}
+          {% if enquiry_form.phone.errors %}
+            <span class="field-error">{{ enquiry_form.phone.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <div class="form-row-split">
+          <div>
+            <label for="f-email">Email Address</label>
+            {{ enquiry_form.email }}
+            {% if enquiry_form.email.errors %}
+              <span class="field-error">{{ enquiry_form.email.errors.0 }}</span>
+            {% endif %}
+          </div>
+          <div>
+            <label for="f-company">Company / Firm</label>
+            {{ enquiry_form.company }}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="f-product">Product Interested In</label>
+          {{ enquiry_form.product }}
+          {{ enquiry_form.product_name }}
+          {% if enquiry_form.product.errors %}
+            <span class="field-error">{{ enquiry_form.product.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <div class="form-row-split">
+          <div>
+            <label for="f-quantity">Required Quantity</label>
+            {{ enquiry_form.quantity }}
+          </div>
+          <div>
+            <label for="f-unit">Unit</label>
+            {{ enquiry_form.unit }}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="f-location">Delivery Destination / Site</label>
+          {{ enquiry_form.location }}
+        </div>
+
+        <div class="form-row">
+          <label for="f-message">Message / Specifications <span style="color:var(--accent);">*</span></label>
+          {{ enquiry_form.message }}
+          {% if enquiry_form.message.errors %}
+            <span class="field-error">{{ enquiry_form.message.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-accent btn-block" style="margin-top: 8px;">
+          <i class="fa-solid fa-paper-plane"></i> Submit Enquiry
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

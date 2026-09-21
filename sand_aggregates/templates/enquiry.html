@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Request a Quotation | {{ site_settings.business_name }}{% endblock %}
+
+{% block content %}
+<section style="padding: var(--space-5) 0 var(--space-6);">
+  <div class="container" style="max-width: 800px;">
+    <div class="section-head" style="text-align: center; margin: 0 auto var(--space-4);">
+      <span class="section-kicker"><i class="fa-solid fa-paper-plane"></i> Material Enquiry</span>
+      <h1>Request a Material Quotation</h1>
+      <p class="section-sub">Have custom grading requirements, need bulk long-term project rates, or looking for specific aggregate samples? Send us your requirements.</p>
+    </div>
+
+    <div class="enquiry-wrap" style="background: var(--white);">
+      <form method="POST" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="alert-box error">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+
+        <div class="form-row">
+          <label for="{{ form.name.id_for_label }}">Full Name <span style="color:var(--accent);">*</span></label>
+          {{ form.name }}
+          {% if form.name.errors %}
+            <span class="field-error">{{ form.name.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <div class="form-row-split">
+          <div>
+            <label for="{{ form.phone.id_for_label }}">Mobile Number <span style="color:var(--accent);">*</span></label>
+            {{ form.phone }}
+            {% if form.phone.errors %}
+              <span class="field-error">{{ form.phone.errors.0 }}</span>
+            {% endif %}
+          </div>
+          <div>
+            <label for="{{ form.email.id_for_label }}">Email Address</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+              <span class="field-error">{{ form.email.errors.0 }}</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="{{ form.company.id_for_label }}">Company / Construction Firm</label>
+          {{ form.company }}
+        </div>
+
+        <div class="form-row">
+          <label for="{{ form.product.id_for_label }}">Product / Material of Interest</label>
+          {{ form.product }}
+        </div>
+
+        <div class="form-row-split">
+          <div>
+            <label for="{{ form.quantity.id_for_label }}">Estimated Quantity</label>
+            {{ form.quantity }}
+          </div>
+          <div>
+            <label for="{{ form.unit.id_for_label }}">Unit</label>
+            {{ form.unit }}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="{{ form.location.id_for_label }}">Project / Delivery Location</label>
+          {{ form.location }}
+        </div>
+
+        <div class="form-row">
+          <label for="{{ form.message.id_for_label }}">Enquiry Details & Specifications <span style="color:var(--accent);">*</span></label>
+          {{ form.message }}
+          {% if form.message.errors %}
+            <span class="field-error">{{ form.message.errors.0 }}</span>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-accent btn-block btn-lg" style="margin-top: 16px;">
+          <i class="fa-solid fa-paper-plane"></i> Submit Quotation Request
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} | {{ site_settings.business_name }}{% endblock %}
+{% block meta_description %}{{ product.short_description }}{% endblock %}
+
+{% block content %}
+<section class="product-detail-section">
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav style="margin-bottom: var(--space-3); font-size: 0.9rem; color: var(--stone);">
+      <a href="{% url 'website:home' %}">Home</a> &gt; 
+      <a href="{% url 'website:products' %}">Products</a> &gt; 
+      {% if product.category %}
+        <a href="{% url 'website:products' %}?category={{ product.category.slug }}">{{ product.category.name }}</a> &gt; 
+      {% endif %}
+      <span style="color: var(--charcoal); font-weight: 600;">{{ product.name }}</span>
+    </nav>
+
+    <div class="product-detail-grid">
+      <!-- Image Gallery Display -->
+      <div class="detail-gallery">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" id="main-product-img">
+        {% else %}
+          <img src="{% static 'assets/hero.jpeg' %}" alt="{{ product.name }}" onerror="this.parentElement.classList.add('img-fallback')">
+        {% endif %}
+      </div>
+
+      <!-- Detail Info & Actions -->
+      <div class="detail-info">
+        {% if product.category %}
+          <span class="product-category" style="font-size: 0.85rem; font-weight: 700; color: var(--accent);">
+            {{ product.category.name }}
+          </span>
+        {% endif %}
+
+        <h1 style="font-size: clamp(1.8rem, 3.2vw, 2.4rem); margin: 8px 0 12px;">{{ product.name }}</h1>
+
+        <!-- Stock Status Badge -->
+        <div style="margin-bottom: 16px;">
+          {% if product.available %}
+            <span class="badge-status delivered" style="font-size: 0.85rem; padding: 6px 12px;">
+              <i class="fa-solid fa-circle-check"></i> In Stock & Ready for Immediate Dispatch
+            </span>
+          {% else %}
+            <span class="badge-status cancelled" style="font-size: 0.85rem; padding: 6px 12px;">
+              <i class="fa-solid fa-circle-xmark"></i> Currently Out of Stock
+            </span>
+          {% endif %}
+        </div>
+
+        <p style="font-size: 1.05rem; color: var(--stone); line-height: 1.6; margin-bottom: var(--space-3);">
+          {{ product.short_description }}
+        </p>
+
+        <!-- Pricing Highlight Box -->
+        <div class="detail-price-box">
+          <div>
+            <span style="font-size: 0.88rem; color: var(--stone); display: block;">Wholesale Rate</span>
+            <span class="detail-price">{{ product.formatted_price }}</span>
+            <span style="font-size: 0.95rem; color: var(--stone); font-weight: 600;">/ {{ product.unit }}</span>
+          </div>
+          <div style="text-align: right;">
+            <span style="font-size: 0.8rem; color: var(--stone); display: block;">Minimum Order</span>
+            <strong style="font-size: 0.95rem;">1 {{ product.unit }} (Bulk discounts available)</strong>
+          </div>
+        </div>
+
+        <!-- Full Material Description -->
+        <div style="margin: var(--space-3) 0;">
+          <h3 style="font-size: 1.15rem; margin-bottom: 8px;">Product Specifications & Applications</h3>
+          <p style="color: var(--charcoal); font-size: 0.98rem; white-space: pre-line; line-height: 1.65;">
+            {{ product.description }}
+          </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="detail-actions">
+          {% if product.available %}
+            <a href="{% url 'website:order_create_product' product.slug %}" class="btn btn-accent btn-lg" style="flex: 1;">
+              <i class="fa-solid fa-truck-fast"></i> Order Now
+            </a>
+          {% endif %}
+          
+          <a href="{{ whatsapp_product_url }}" class="btn btn-whatsapp btn-lg" target="_blank" rel="noopener" style="flex: 1;">
+            <i class="fa-brands fa-whatsapp"></i> Enquire on WhatsApp
+          </a>
+
+          <a href="{% url 'website:enquiry_create' %}?product={{ product.id }}" class="btn btn-outline btn-lg">
+            <i class="fa-regular fa-envelope"></i> Request Custom Quote
+          </a>
+        </div>
+
+        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(34,37,42,0.08); font-size: 0.88rem; color: var(--stone);">
+          <i class="fa-solid fa-shield-halved" style="color: var(--accent);"></i> All aggregates undergo laboratory grading and certified weighbridge verification before site dispatch.
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <div style="margin-top: var(--space-6);">
+      <h2 style="font-size: 1.6rem; margin-bottom: var(--space-4);">Recommended Materials</h2>
+      <div class="product-grid">
+        {% for rel in related_products %}
+          <article class="product-card" data-product="{{ rel.name }}">
+            <div class="product-card-img-wrap">
+              {% if rel.image %}
+                <img src="{{ rel.image.url }}" alt="{{ rel.name }}" loading="lazy">
+              {% else %}
+                <img src="{% static 'assets/hero.jpeg' %}" alt="{{ rel.name }}" loading="lazy" onerror="this.parentElement.classList.add('img-fallback')">
+              {% endif %}
+            </div>
+            <div class="product-body">
+              <h3><a href="{{ rel.get_absolute_url }}">{{ rel.name }}</a></h3>
+              <p>{{ rel.short_description }}</p>
+              <div class="product-price-bar">
+                <span class="price-tag">{{ rel.formatted_price }}</span>
+                <span class="price-unit">per {{ rel.unit }}</span>
+              </div>
+              <a href="{{ rel.get_absolute_url }}" class="btn btn-outline btn-sm btn-block">View Details</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

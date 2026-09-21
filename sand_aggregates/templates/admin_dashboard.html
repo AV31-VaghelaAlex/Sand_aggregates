@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Executive Operations Dashboard | {{ site_settings.business_name }}{% endblock %}
+
+{% block content %}
+<section class="dashboard-section">
+  <div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: var(--space-4);">
+      <div>
+        <span class="section-kicker"><i class="fa-solid fa-chart-line"></i> Operations Command</span>
+        <h1>Business & Logistics Dashboard</h1>
+        <p class="section-sub">Overview of active orders, incoming quotation enquiries, and inventory status.</p>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="{% url 'admin:index' %}" target="_blank" class="btn btn-accent btn-sm">
+          <i class="fa-solid fa-sliders"></i> Django Admin Panel
+        </a>
+        <a href="{% url 'admin:website_product_changelist' %}" target="_blank" class="btn btn-outline btn-sm">
+          <i class="fa-solid fa-boxes-stacked"></i> Manage Products
+        </a>
+        <a href="{% url 'admin:website_product_add' %}" target="_blank" class="btn btn-outline btn-sm">
+          <i class="fa-solid fa-plus"></i> Add New Product
+        </a>
+      </div>
+    </div>
+
+    <!-- Metric Stat Cards -->
+    <div class="dash-metric-grid">
+      <div class="dash-metric-card">
+        <div class="metric-title"><i class="fa-solid fa-cubes"></i> Total Products</div>
+        <div class="metric-value">{{ total_products }}</div>
+        <small style="color: var(--success); font-weight: 600;">{{ available_products }} available in stock</small>
+      </div>
+
+      <div class="dash-metric-card blue">
+        <div class="metric-title"><i class="fa-solid fa-truck-ramp-box"></i> Total Orders</div>
+        <div class="metric-value">{{ total_orders }}</div>
+        <small style="color: var(--info); font-weight: 600;">{{ delivered_orders }} delivered</small>
+      </div>
+
+      <div class="dash-metric-card orange">
+        <div class="metric-title"><i class="fa-solid fa-clock"></i> Pending Orders</div>
+        <div class="metric-value">{{ pending_orders }}</div>
+        <small style="color: var(--warning); font-weight: 600;">Require dispatch confirmation</small>
+      </div>
+
+      <div class="dash-metric-card green">
+        <div class="metric-title"><i class="fa-solid fa-indian-rupee-sign"></i> Total Order Value</div>
+        <div class="metric-value">₹{{ total_revenue|floatformat:0 }}</div>
+        <small style="color: var(--stone);">Excludes cancelled orders</small>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
+      <div class="dash-card">
+        <h3 style="font-size: 1.15rem; margin-bottom: 16px;"><i class="fa-solid fa-chart-pie" style="color:var(--accent);"></i> Orders by Status</h3>
+        <div style="height: 260px; position: relative;">
+          <canvas id="orderStatusChart"></canvas>
+        </div>
+      </div>
+
+      <div class="dash-card">
+        <h3 style="font-size: 1.15rem; margin-bottom: 16px;"><i class="fa-solid fa-chart-column" style="color:var(--accent);"></i> Enquiries Breakdown</h3>
+        <div style="height: 260px; position: relative;">
+          <canvas id="enquiryStatusChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Orders & Enquiries Tables -->
+    <div class="dash-tables-grid">
+      <!-- Recent Orders Table -->
+      <div class="dash-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 1.15rem; margin: 0;"><i class="fa-solid fa-boxes-packing" style="color:var(--accent);"></i> Recent Orders</h3>
+          <a href="{% url 'admin:website_order_changelist' %}" target="_blank" style="font-size: 0.85rem; color: var(--accent); font-weight: 600;">
+            View All in Admin &raquo;
+          </a>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ord in recent_orders %}
+                <tr>
+                  <td>
+                    <a href="{% url 'admin:website_order_change' ord.id %}" target="_blank" style="font-weight: 700; color: var(--charcoal);">
+                      {{ ord.order_number }}
+                    </a>
+                  </td>
+                  <td>{{ ord.customer_name }}</td>
+                  <td>{{ ord.product.name }} ({{ ord.quantity }} {{ ord.product.unit }})</td>
+                  <td><strong>{{ ord.formatted_total }}</strong></td>
+                  <td>
+                    <span class="badge-status {{ ord.status|lower }}">{{ ord.status }}</span>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="5" style="text-align: center; color: var(--stone); padding: 24px;">No orders placed yet.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Recent Enquiries Table -->
+      <div class="dash-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 1.15rem; margin: 0;"><i class="fa-solid fa-comments" style="color:var(--accent);"></i> Recent Enquiries</h3>
+          <a href="{% url 'admin:website_enquiry_changelist' %}" target="_blank" style="font-size: 0.85rem; color: var(--accent); font-weight: 600;">
+            View All in Admin &raquo;
+          </a>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Contact</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for enq in recent_enquiries %}
+                <tr>
+                  <td>
+                    <a href="{% url 'admin:website_enquiry_change' enq.id %}" target="_blank" style="font-weight: 700; color: var(--charcoal);">
+                      {{ enq.name }}
+                    </a>
+                  </td>
+                  <td>{{ enq.phone }}</td>
+                  <td>{% if enq.product %}{{ enq.product.name }}{% else %}{{ enq.product_name|default:"General" }}{% endif %}</td>
+                  <td>{{ enq.quantity|default:"-" }} {{ enq.unit }}</td>
+                  <td>
+                    <span class="badge-status {{ enq.status|lower }}">{{ enq.status }}</span>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="5" style="text-align: center; color: var(--stone); padding: 24px;">No enquiries received yet.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{{ order_status_labels|json_script:"order-status-labels" }}
+{{ order_status_counts|json_script:"order-status-counts" }}
+{{ enquiry_status_labels|json_script:"enquiry-status-labels" }}
+{{ enquiry_status_counts|json_script:"enquiry-status-counts" }}
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const orderStatusLabels = JSON.parse(document.getElementById('order-status-labels').textContent);
+  const orderStatusCounts = JSON.parse(document.getElementById('order-status-counts').textContent);
+  const enquiryStatusLabels = JSON.parse(document.getElementById('enquiry-status-labels').textContent);
+  const enquiryStatusCounts = JSON.parse(document.getElementById('enquiry-status-counts').textContent);
+
+  // Orders Chart
+  const orderCtx = document.getElementById('orderStatusChart').getContext('2d');
+  new Chart(orderCtx, {
+    type: 'doughnut',
+    data: {
+      labels: orderStatusLabels,
+      datasets: [{
+        data: orderStatusCounts,
+        backgroundColor: [
+          '#F59E0B', // Pending - Amber
+          '#3B82F6', // Confirmed - Blue
+          '#8B5CF6', // Processing - Purple
+          '#10B981', // Delivered - Emerald
+          '#EF4444'  // Cancelled - Red
+        ],
+        borderWidth: 2,
+        borderColor: '#FFFFFF'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Inter' } } }
+      }
+    }
+  });
+
+  // Enquiry Chart
+  const enquiryCtx = document.getElementById('enquiryStatusChart').getContext('2d');
+  new Chart(enquiryCtx, {
+    type: 'bar',
+    data: {
+      labels: enquiryStatusLabels,
+      datasets: [{
+        label: 'Number of Enquiries',
+        data: enquiryStatusCounts,
+        backgroundColor: [
+          '#C05621', // New - Terracotta
+          '#2563EB', // Contacted - Blue
+          '#4B5563'  // Closed - Slate
+        ],
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 1, font: { family: 'Inter' } },
+          grid: { color: 'rgba(0,0,0,0.05)' }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { font: { family: 'Inter' } }
+        }
+      }
+    }
+  });
+});
+</script>
+{% endblock %}

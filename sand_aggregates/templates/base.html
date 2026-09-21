@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ site_settings.business_name }} | Sand & Aggregates Supplier{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Quality sand, M-Sand, stone aggregates and construction materials for builders, contractors and infrastructure projects. Request a quote today.{% endblock %}">
+  <meta name="keywords" content="sand supplier, M-Sand, river sand, stone aggregates, 10mm aggregate, 20mm aggregate, 40mm aggregate, GSB, construction materials">
+
+  <!-- Favicon & Open Graph -->
+  <link rel="icon" type="image/png" href="{% static 'assets/logo_transparent.png' %}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ site_settings.business_name }} | Sand & Aggregates Supplier">
+  <meta property="og:description" content="{{ site_settings.tagline }}">
+  <meta property="og:image" content="{% static 'assets/logo_transparent.png' %}">
+  
+  <!-- Fonts: Archivo for industrial headline weight, Inter for readable body text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Site Stylesheet -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ============ HEADER / NAVBAR ============ -->
+<header class="site-header" id="top">
+  <div class="container header-inner">
+    <a href="{% url 'website:home' %}" class="brand" aria-label="{{ site_settings.business_name }} home">
+      <div class="brand-logo-container">
+        <img src="{% static 'assets/logo_transparent.png' %}" alt="{{ site_settings.business_name }}" class="brand-logo">
+      </div>
+    </a>
+
+    <nav class="main-nav" id="main-nav">
+      <ul>
+        <li><a href="{% url 'website:home' %}">Home</a></li>
+        <li><a href="{% url 'website:home' %}#about">About</a></li>
+        <li><a href="{% url 'website:products' %}">Products</a></li>
+        <li><a href="{% url 'website:order_create' %}">Order Online</a></li>
+        <li><a href="{% url 'website:home' %}#why-us">Why Us</a></li>
+        <li><a href="{% url 'website:home' %}#contact">Contact</a></li>
+        {% if user.is_staff %}
+          <li><a href="{% url 'website:admin_dashboard' %}" style="color: var(--sand);"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+          <li><a href="{% url 'admin:index' %}" target="_blank" style="color: var(--sand);"><i class="fa-solid fa-gear"></i> Admin</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <a href="{% url 'website:order_create' %}" class="btn btn-accent btn-sm">
+        <i class="fa-solid fa-truck-ramp-box"></i> Order Now
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Flash notification messages -->
+{% if messages %}
+<div class="container messages-container">
+  {% for message in messages %}
+    <div class="alert-box {{ message.tags }} alert-dismissible" role="alert">
+      <span>
+        {% if message.tags == 'success' %}<i class="fa-solid fa-circle-check"></i>
+        {% elif message.tags == 'error' %}<i class="fa-solid fa-circle-exclamation"></i>
+        {% else %}<i class="fa-solid fa-circle-info"></i>{% endif %}
+        {{ message }}
+      </span>
+      <button type="button" onclick="this.parentElement.remove()" style="background:none;border:none;cursor:pointer;font-size:1.1rem;color:inherit;" aria-label="Close">&times;</button>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Main Content Block -->
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a href="{% url 'website:home' %}" style="display:inline-block; margin-bottom: 14px;">
+        <div class="brand-logo-container footer-logo">
+          <img src="{% static 'assets/logo_transparent.png' %}" alt="{{ site_settings.business_name }}" class="brand-logo">
+        </div>
+      </a>
+      <p>Supplying quality sand and stone aggregates for construction, infrastructure, and real estate development projects.</p>
+      
+      <!-- Social Media Icons -->
+      <div class="footer-social-links">
+        <a href="{{ whatsapp_url }}" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        {% if site_settings.instagram_url %}<a href="{{ site_settings.instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>{% endif %}
+        {% if site_settings.linkedin_url %}<a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>{% endif %}
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="{% url 'website:home' %}">Home</a></li>
+        <li><a href="{% url 'website:home' %}#about">About Us</a></li>
+        <li><a href="{% url 'website:products' %}">Material Catalog</a></li>
+        <li><a href="{% url 'website:order_create' %}">Place Material Order</a></li>
+        <li><a href="{% url 'website:enquiry_create' %}">Request Quotation</a></li>
+        <li><a href="{% url 'website:home' %}#contact">Contact & Support</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Materials We Supply</h4>
+      <ul>
+        {% for cat in nav_categories %}
+          <li><a href="{% url 'website:products' %}?category={{ cat.slug }}">{{ cat.name }}</a></li>
+        {% empty %}
+          <li><a href="{% url 'website:products' %}">Construction Sand</a></li>
+          <li><a href="{% url 'website:products' %}">River Sand & M-Sand</a></li>
+          <li><a href="{% url 'website:products' %}">Stone Aggregates (10/20/40mm)</a></li>
+          <li><a href="{% url 'website:products' %}">Granular Sub Base (GSB)</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Direct Contact</h4>
+      <ul>
+        <li>
+          <a href="tel:{{ site_settings.phone_raw }}">
+            <i class="fa-solid fa-phone" style="color:var(--sand);"></i> {{ site_settings.phone_display }}
+          </a>
+        </li>
+        <li>
+          <a href="{{ whatsapp_url }}" target="_blank" rel="noopener">
+            <i class="fa-brands fa-whatsapp" style="color:#25D366;"></i> WhatsApp Support
+          </a>
+        </li>
+        <li>
+          <a href="mailto:{{ site_settings.email }}">
+            <i class="fa-solid fa-envelope" style="color:var(--sand);"></i> {{ site_settings.email }}
+          </a>
+        </li>
+        <li style="color:rgba(255,255,255,0.7); font-size:0.88rem; margin-top:8px;">
+          <i class="fa-solid fa-location-dot" style="color:var(--sand);"></i> {{ site_settings.address }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; {{ current_year }} {{ site_settings.business_name }}. All Rights Reserved. Powered by Sand Aggregates System.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating WhatsApp Action Button -->
+<a href="{{ whatsapp_url }}" class="whatsapp-float" aria-label="Chat with us on WhatsApp" target="_blank" rel="noopener" title="Chat on WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<!-- Core JavaScript -->
+<script src="{% static 'js/script.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

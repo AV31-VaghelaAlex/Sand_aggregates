@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Confirmed #{{ order.order_number }} | {{ site_settings.business_name }}{% endblock %}
+
+{% block content %}
+<section style="padding: var(--space-6) 0;">
+  <div class="container">
+    <div class="success-card">
+      <div class="success-icon">
+        <i class="fa-solid fa-check"></i>
+      </div>
+
+      <span class="section-kicker" style="color: var(--success); font-weight: 700;">Submission Received</span>
+      <h1 style="font-size: clamp(1.8rem, 3.5vw, 2.3rem); margin: 8px 0;">Your order has been submitted successfully!</h1>
+      <p style="color: var(--stone); font-size: 1.05rem; margin: 0 auto 16px;">
+        Thank you, <strong>{{ order.customer_name }}</strong>. Our logistics control desk has registered your dispatch request and will contact you on <strong>{{ order.phone }}</strong> to confirm vehicle transit.
+      </p>
+
+      <div>
+        <span class="order-number-badge">
+          Order Number: {{ order.order_number }}
+        </span>
+      </div>
+
+      <!-- Order Receipt Breakdown -->
+      <div style="background: var(--off-white); border-radius: var(--radius); padding: var(--space-3); margin: var(--space-4) 0; text-align: left; border: 1px solid rgba(34,37,42,0.08);">
+        <h3 style="font-size: 1.1rem; margin-bottom: 12px; border-bottom: 1px solid rgba(34,37,42,0.08); padding-bottom: 6px;">
+          <i class="fa-solid fa-receipt"></i> Order Particulars
+        </h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.95rem;">
+          <div>
+            <span style="color: var(--stone); display: block; font-size: 0.85rem;">Material Ordered:</span>
+            <strong>{{ order.product.name }}</strong>
+          </div>
+          <div>
+            <span style="color: var(--stone); display: block; font-size: 0.85rem;">Quantity:</span>
+            <strong>{{ order.quantity }} {{ order.product.unit }}</strong>
+          </div>
+          <div>
+            <span style="color: var(--stone); display: block; font-size: 0.85rem;">Unit Rate:</span>
+            <strong>₹{{ order.price }} / {{ order.product.unit }}</strong>
+          </div>
+          <div>
+            <span style="color: var(--stone); display: block; font-size: 0.85rem;">Total Estimated Cost:</span>
+            <strong style="color: var(--accent); font-size: 1.15rem;">{{ order.formatted_total }}</strong>
+          </div>
+          <div style="grid-column: 1 / -1; margin-top: 6px; padding-top: 8px; border-top: 1px dashed rgba(34,37,42,0.12);">
+            <span style="color: var(--stone); display: block; font-size: 0.85rem;">Destination Address:</span>
+            <span>{{ order.address }}</span>
+          </div>
+          {% if order.notes %}
+          <div style="grid-column: 1 / -1;">
+            <span style="color: var(--stone); display: block; font-size: 0.85rem;">Site Notes:</span>
+            <span>{{ order.notes }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: var(--space-4);">
+        <a href="{{ whatsapp_order_url }}" target="_blank" rel="noopener" class="btn btn-whatsapp btn-lg">
+          <i class="fa-brands fa-whatsapp"></i> Track / Expedite on WhatsApp
+        </a>
+        <a href="{% url 'website:products' %}" class="btn btn-outline btn-lg">
+          <i class="fa-solid fa-cubes"></i> Browse More Materials
+        </a>
+        <button onclick="window.print()" class="btn btn-outline btn-lg">
+          <i class="fa-solid fa-print"></i> Print Slip
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Place Material Order | {{ site_settings.business_name }}{% endblock %}
+
+{% block content %}
+<section class="order-section">
+  <div class="container">
+    <div class="section-head" style="margin-bottom: var(--space-4);">
+      <span class="section-kicker"><i class="fa-solid fa-truck-ramp-box"></i> Direct Procurement</span>
+      <h1>Place Material Order</h1>
+      <p class="section-sub">Submit your site delivery order. No online payment required upfront. Our dispatch manager will verify availability and contact you with the dumper schedule.</p>
+    </div>
+
+    <div class="order-layout">
+      <!-- Order Form -->
+      <div class="enquiry-wrap" style="background: var(--white); border-radius: var(--radius-lg); padding: var(--space-4);">
+        <form method="POST" novalidate id="order-form">
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="alert-box error" style="margin-bottom: 16px;">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          <h3 style="font-size: 1.15rem; margin-bottom: 16px; border-bottom: 1px solid rgba(34,37,42,0.08); padding-bottom: 8px;">
+            <i class="fa-solid fa-user-tag" style="color:var(--accent);"></i> Customer Information
+          </h3>
+
+          <div class="form-row">
+            <label for="{{ form.customer_name.id_for_label }}">Full Name / Firm Name <span style="color:var(--accent);">*</span></label>
+            {{ form.customer_name }}
+            {% if form.customer_name.errors %}
+              <span class="field-error">{{ form.customer_name.errors.0 }}</span>
+            {% endif %}
+          </div>
+
+          <div class="form-row-split">
+            <div>
+              <label for="{{ form.phone.id_for_label }}">Mobile Number <span style="color:var(--accent);">*</span></label>
+              {{ form.phone }}
+              {% if form.phone.errors %}
+                <span class="field-error">{{ form.phone.errors.0 }}</span>
+              {% endif %}
+            </div>
+            <div>
+              <label for="{{ form.email.id_for_label }}">Email Address <span style="color:var(--accent);">*</span></label>
+              {{ form.email }}
+              {% if form.email.errors %}
+                <span class="field-error">{{ form.email.errors.0 }}</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="{{ form.address.id_for_label }}">Site Delivery Address & Landmark <span style="color:var(--accent);">*</span></label>
+            {{ form.address }}
+            {% if form.address.errors %}
+              <span class="field-error">{{ form.address.errors.0 }}</span>
+            {% endif %}
+          </div>
+
+          <h3 style="font-size: 1.15rem; margin: 24px 0 16px; border-bottom: 1px solid rgba(34,37,42,0.08); padding-bottom: 8px;">
+            <i class="fa-solid fa-cubes" style="color:var(--accent);"></i> Material & Quantity
+          </h3>
+
+          <div class="form-row">
+            <label for="order-product-select">Select Material <span style="color:var(--accent);">*</span></label>
+            <select name="product" class="form-select" id="order-product-select" required>
+              <option value="" disabled {% if not selected_product %}selected{% endif %}>Choose material...</option>
+              {% for p in products %}
+                <option 
+                  value="{{ p.id }}" 
+                  data-price="{{ p.price }}" 
+                  data-unit="{{ p.unit }}"
+                  {% if selected_product and selected_product.id == p.id %}selected{% endif %}
+                >
+                  {{ p.name }} — ₹{{ p.price }}/{{ p.unit }}
+                </option>
+              {% endfor %}
+            </select>
+            {% if form.product.errors %}
+              <span class="field-error">{{ form.product.errors.0 }}</span>
+            {% endif %}
+          </div>
+
+          <div class="form-row-split">
+            <div>
+              <label for="order-quantity-input">Quantity (<span id="order-unit-display">Ton</span>) <span style="color:var(--accent);">*</span></label>
+              {{ form.quantity }}
+              {% if form.quantity.errors %}
+                <span class="field-error">{{ form.quantity.errors.0 }}</span>
+              {% endif %}
+            </div>
+            <div>
+              <label>Estimated Rate</label>
+              <div id="order-unit-price-display" style="padding: 10px 14px; background: var(--off-white); border-radius: var(--radius); font-weight: 700; color: var(--charcoal);">
+                ₹0.00
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top: 8px;">
+            <label for="{{ form.notes.id_for_label }}">Special Site Delivery Notes (Optional)</label>
+            {{ form.notes }}
+            {% if form.notes.errors %}
+              <span class="field-error">{{ form.notes.errors.0 }}</span>
+            {% endif %}
+          </div>
+
+          <button type="submit" class="btn btn-accent btn-lg btn-block" style="margin-top: 16px;">
+            <i class="fa-solid fa-check-circle"></i> Confirm & Submit Order
+          </button>
+        </form>
+      </div>
+
+      <!-- Live Order Summary Sticky Card -->
+      <aside class="order-summary-box">
+        <h3 style="font-size: 1.2rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-file-invoice" style="color:var(--accent);"></i> Order Summary
+        </h3>
+        <p style="font-size: 0.88rem; color: var(--stone); margin-bottom: 16px;">
+          Review the projected material costs. No online payment required; pay via RTGS/NEFT/Cash upon delivery verification.
+        </p>
+
+        <div class="order-summary-line">
+          <span style="color: var(--stone);">Unit Price</span>
+          <span id="order-unit-price-display" style="font-weight: 600;">₹0.00</span>
+        </div>
+
+        <div class="order-summary-line">
+          <span style="color: var(--stone);">Quantity</span>
+          <span id="order-quantity-display" style="font-weight: 600;">0</span>
+        </div>
+
+        <div class="order-summary-line">
+          <span style="color: var(--stone);">Delivery Dispatch</span>
+          <span style="font-weight: 600; color: var(--success);"><i class="fa-solid fa-truck"></i> Scheduled on Confirmation</span>
+        </div>
+
+        <div class="order-summary-total">
+          <span>Total Estimate</span>
+          <span id="order-total-amount-display">₹0.00</span>
+        </div>
+
+        <div style="background: var(--off-white); border-radius: var(--radius); padding: 12px; margin-top: 16px; font-size: 0.85rem; color: var(--stone);">
+          <strong style="color: var(--charcoal); display: block; margin-bottom: 4px;"><i class="fa-solid fa-circle-info"></i> How it works:</strong>
+          1. Submit your order details.<br>
+          2. We verify nearest quarry dispatch.<br>
+          3. You receive confirmation & dumper truck ETA.
+        </div>
+
+        <div style="margin-top: 16px; text-align: center;">
+          <a href="{{ whatsapp_url }}" target="_blank" rel="noopener" class="btn btn-whatsapp btn-sm btn-block">
+            <i class="fa-brands fa-whatsapp"></i> Instant Support on WhatsApp
+          </a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}

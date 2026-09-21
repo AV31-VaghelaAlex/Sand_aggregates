@@ -1,0 +1,78 @@
+# Walkthrough: Sand Aggregates Management & Ordering System (Django)
+
+Successfully converted the static Sand Aggregates website into a production-ready, full-featured Django web application (**J Enterprise Sand & Aggregate**). All original industrial aesthetics, colors, typography (Archivo & Inter), hero textures, highlight strips, why choose us sections, animations, and layouts are preserved, and enhanced with a dynamic database, ordering system, quotation handling, WhatsApp integration, and management portal.
+
+---
+
+## 1. Brand & Company Integration: LJ ENTERPRISE
+
+The company identity was updated site-wide to **LJ ENTERPRISE**:
+- **Company Name**: LJ ENTERPRISE (Construction company)
+- **Phone Number**: +91 81413 52886 (Call & WhatsApp click-to-chat)
+- **Email**: infoljenterprise07@gmail.com
+- **Operating Hours**: Open 24 hours (with 24/7 delivery badge)
+- **Location**: Ahmedabad, Gujarat, India (with Google Maps integration)
+- **LinkedIn**: https://www.linkedin.com/company/rashienterprise
+- **Core Mission**: *"At the heart of every strong structure lies a solid foundation — and that starts with quality materials. We specialize in the supply of premium Sand, Granular Sub Base (GSB), and Aggregates for a wide range of infrastructure, roadwork, and construction projects."*
+- **Universal Logo (`logo_transparent.png`)**: High-contrast, transparent logo used in header navbar, footer, favicon, and admin header without clipping.
+
+---
+
+## 2. Key Accomplishments & Features
+
+### Core Technology Stack
+- **Python 3.14 / Django 4.2 LTS** with full production `.env` configuration.
+- **WhiteNoise** static asset compression for live server deployments.
+- **SQLite** development database configured with ORM migrations.
+- **Pillow** automated asset texture pipeline generating realistic photos for all products (Construction Sand, River Sand, M-Sand, 10mm, 20mm, 40mm Aggregates, GSB).
+
+### Database Models & Dynamic Engine
+- [models.py](file:///d:/Charust%20university/Project/sand/sand_aggregates/website/models.py):
+  - `Category`: Categorization for Sand, Stone Aggregates, and Road Sub-Base.
+  - `Product`: Dynamic pricing per Ton/Truck/m³, availability toggles, short & long descriptions, image uploads.
+  - `Order`: Unique auto-generated tracking numbers (`ORD-2026-XXXX`), unit price snapshotting, calculated totals, delivery site address, notes, and status lifecycle (`Pending`, `Confirmed`, `Processing`, `Delivered`, `Cancelled`).
+  - `Enquiry`: Project inquiry management with company names, tonnage, location, and status.
+  - `SiteSetting`: Singleton admin-editable model for phone numbers, WhatsApp digits, address, business hours, and social media URLs (Instagram, Facebook, YouTube, LinkedIn).
+
+### User Ordering & Quotation Workflow
+- **Interactive Price Calculator** in [order.html](file:///d:/Charust%20university/Project/sand/sand_aggregates/templates/order.html): Real-time JavaScript computation of total material cost (`Unit Price × Quantity = Total Amount`).
+- **Confirmation Slip** in [order_success.html](file:///d:/Charust%20university/Project/sand/sand_aggregates/templates/order_success.html): Detailed receipt display with order number and a one-click WhatsApp button to ping dispatch managers with the order reference.
+- **Catalog & Search** in [products.html](file:///d:/Charust%20university/Project/sand/sand_aggregates/templates/products.html): Category filtering pills, keyword search, stock badges.
+- **Product Detail** in [product_detail.html](file:///d:/Charust%20university/Project/sand/sand_aggregates/templates/product_detail.html): Specifications, test grading details, and direct order/WhatsApp action triggers.
+
+### Operations Dashboard & Admin Panel
+- **Operations Dashboard** in [admin_dashboard.html](file:///d:/Charust%20university/Project/sand/sand_aggregates/templates/admin_dashboard.html):
+  - Metric stat cards: Total Products, Available Products, Total Orders, Pending Orders, Delivered Orders, and Gross Order Value.
+  - **Chart.js** Doughnut chart for Order Status and Bar chart for Enquiries.
+  - Live dispatch activity tables.
+- **Django Admin** in [admin.py](file:///d:/Charust%20university/Project/sand/sand_aggregates/website/admin.py):
+  - Image thumbnails, quick price & stock editing, order filters, search by order number and customer name.
+
+---
+
+## 3. Verification & Testing Results
+
+| Test Item | Verification Result |
+| :--- | :--- |
+| **Django System Check** | `System check identified no issues (0 silenced)` |
+| **Unit Test Suite** | 13/13 unit tests passed (`Ran 13 tests ... OK`) |
+| **End-to-End Order Submission** | Submitted test order; verified redirect to `/order/success/ORD-2026-0003/` |
+| **Static Assets & WhiteNoise** | 140 static files collected without warnings |
+| **New Logo Integration** | Placed in header and footer; tested on responsive breakpoints |
+| **HTTP Endpoints** | All public routes (`/`, `/products/`, `/order/`, `/enquiry/`) return HTTP `200 OK` |
+
+---
+
+## 4. How to Run Locally
+
+```bash
+cd "d:\Charust university\Project\sand\sand_aggregates"
+python manage.py runserver 127.0.0.1:8080
+```
+- **Website URL**: [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
+- **Catalog**: [http://127.0.0.1:8080/products/](http://127.0.0.1:8080/products/)
+- **Order Online**: [http://127.0.0.1:8080/order/](http://127.0.0.1:8080/order/)
+- **Operations Dashboard**: [http://127.0.0.1:8080/admin-dashboard/](http://127.0.0.1:8080/admin-dashboard/)
+- **Django Admin**: [http://127.0.0.1:8080/admin/](http://127.0.0.1:8080/admin/)
+  - **Username**: `admin`
+  - **Password**: `admin123`
