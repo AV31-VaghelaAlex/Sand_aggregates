@@ -30,6 +30,16 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0,*').split(',')
 ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS if host.strip()]
 
+# CSRF trusted origins for secure HTTPS deployments (e.g. PythonAnywhere, custom domain)
+csrf_origins = os.environ.get(
+    'DJANGO_CSRF_TRUSTED_ORIGINS',
+    'https://*.pythonanywhere.com,http://localhost:8000,http://127.0.0.1:8000'
+).split(',')
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins if origin.strip()]
+
+# Honor HTTPS header forwarded by PythonAnywhere and reverse proxies
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',

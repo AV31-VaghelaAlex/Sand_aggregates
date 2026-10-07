@@ -1,6 +1,9 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from decimal import Decimal
+from pathlib import Path
+import shutil
 from website.models import Category, Product, Order, Enquiry, SiteSetting
 
 User = get_user_model()
@@ -54,7 +57,18 @@ class Command(BaseCommand):
             defaults={'name': 'Coarse Stone Aggregates', 'order': 2, 'description': 'Crushed blue metal stone aggregates in 10mm, 20mm sizes for concrete.'}
         )
 
-        # 4. Products
+        # 4. Product Media Initialization
+        media_products_dir = settings.MEDIA_ROOT / 'products'
+        media_products_dir.mkdir(parents=True, exist_ok=True)
+        static_images_dir = settings.BASE_DIR / 'static' / 'images'
+        if static_images_dir.exists():
+            for img_file in static_images_dir.glob('*.*'):
+                dest_file = media_products_dir / img_file.name
+                if not dest_file.exists():
+                    shutil.copy2(img_file, dest_file)
+            self.stdout.write(self.style.SUCCESS("Initialized media/products assets."))
+
+        # 5. Products
         products_data = [
             {
                 'name': 'Coarse Sand',
