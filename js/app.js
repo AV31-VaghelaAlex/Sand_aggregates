@@ -5,14 +5,71 @@
  * Contact Email: infoljenterprise07@gmail.com
  */
 
-// 1. Static Materials Catalog Data (No database required!)
+// 1. Static Materials Catalog Data (Exact 6 Certified Products)
 const PRODUCTS_DATA = [
+  {
+    id: "10mm-aggregate",
+    name: "10mm Aggregate",
+    category: "stone",
+    categoryName: "Coarse Stone Aggregates",
+    image: "assets/10mm.jpg",
+    shortDesc: "Crushed stone aggregate for precast items, columns, and RCC roofing.",
+    fullDesc: "Single-sized 10mm blue metal granite crushed aggregate. Essential for dense reinforcement concrete, precast slabs, pipe casting, and architectural beam manufacturing with tight rebar clearances.",
+    price: 1350,
+    unit: "Ton",
+    specs: {
+      "Size": "10mm Single Sized",
+      "Grading Standard": "IS 383 Compliant",
+      "Flakiness Index": "< 15%",
+      "Best For": "Dense RCC Slabs, Precast Items, Lintels & Roofing"
+    },
+    inStock: true,
+    featured: true
+  },
+  {
+    id: "20mm-aggregate",
+    name: "20mm Aggregate",
+    category: "stone",
+    categoryName: "Coarse Stone Aggregates",
+    image: "assets/20mm.jpg",
+    shortDesc: "Standard crushed aggregate for RCC structures, slabs, and foundations.",
+    fullDesc: "The most widely used coarse aggregate in structural civil engineering. Tested for flakiness and elongation index under strict IS 383 specifications. Delivers high compressive load capacity and tight interlocking.",
+    price: 1450,
+    unit: "Ton",
+    specs: {
+      "Size": "20mm Graded Nominal",
+      "Grading Standard": "IS 383:2016",
+      "Impact Value": "< 18%",
+      "Best For": "Foundations, RCC Columns, Beams & Raft Slabs"
+    },
+    inStock: true,
+    featured: true
+  },
+  {
+    id: "banas-sand",
+    name: "Banas Sand",
+    category: "sand",
+    categoryName: "Sand & Fine Aggregates",
+    image: "assets/Banas_Sand.jpeg",
+    shortDesc: "High Quality, Maximum Strength. Natural river sand sourced from certified riverbeds.",
+    fullDesc: "Premium natural Banas river sand sourced from certified riverbeds. Widely recognized across Gujarat for maximum load-bearing concrete and long-lasting durability in all residential and commercial builds.",
+    price: 1700,
+    unit: "Ton",
+    specs: {
+      "Silt Content": "< 2.5%",
+      "Specific Gravity": "2.68",
+      "Grading Zone": "Zone II Natural River Sand",
+      "Best For": "High-Rise Slabs, Bridges & High-Grade Concrete"
+    },
+    inStock: true,
+    featured: true
+  },
   {
     id: "coarse-sand",
     name: "Coarse Sand",
     category: "sand",
     categoryName: "Sand & Fine Aggregates",
-    image: "assets/coarse-sand.jpg",
+    image: "assets/Coarse_Sand.jpg",
     shortDesc: "Stronger Concrete, Better Binding. Ideal for structural RCC columns and slabs.",
     fullDesc: "Superior quality coarse sand suitable for concrete reinforcement, structural RCC slabs, foundation columns, and high-strength load bearing members. Cleanly screened with minimal silt for superior cement bonding.",
     price: 1350,
@@ -27,31 +84,31 @@ const PRODUCTS_DATA = [
     featured: true
   },
   {
-    id: "banas-sand",
-    name: "Banas Sand",
+    id: "fine-sand",
+    name: "Fine Sand",
     category: "sand",
     categoryName: "Sand & Fine Aggregates",
-    image: "assets/banas-sand.jpg",
-    shortDesc: "High Quality, Maximum Strength. Natural river sand sourced from Banas riverbeds.",
-    fullDesc: "Authentic Banas river sand sourced from premium riverbeds. Free of excessive clay and silt, widely acknowledged for superior bonding and compressive strength in premium construction projects.",
-    price: 1700,
+    image: "assets/Fine_Sand.jpg",
+    shortDesc: "Best for Plastering & Brickwork. Clean and silt-screened.",
+    fullDesc: "Superior quality fine sand specifically processed for plastering, brick masonry, and tile bedding. Free from organic impurities and clay lumps to deliver a smooth plaster finish with zero cracking.",
+    price: 1250,
     unit: "Ton",
     specs: {
-      "Silt Content": "< 2.5%",
-      "Specific Gravity": "2.68",
-      "Grading Zone": "Zone II Natural River Sand",
-      "Best For": "High-Rise Slabs, Bridges & High-Grade Concrete"
+      "Grain Size": "0.15mm to 1.18mm",
+      "Silt Content": "< 3.5%",
+      "Grading Zone": "Zone IV (IS 383)",
+      "Best For": "Internal/External Wall Plastering & Brick Joint Mortar"
     },
     inStock: true,
     featured: true
   },
   {
-    id: "msand",
-    name: "M-Sand (Manufactured Sand)",
+    id: "m-sand",
+    name: "M-Sand",
     category: "sand",
     categoryName: "Sand & Fine Aggregates",
-    image: "assets/msand.jpg",
-    shortDesc: "VSI machine crushed sand engineered for superior concrete strength with zero silt.",
+    image: "assets/M-Sand.jpeg",
+    shortDesc: "Manufactured sand engineered for superior concrete strength with zero silt.",
     fullDesc: "Crushed manufactured sand produced via VSI (Vertical Shaft Impactor) machines with cubic grain shape. An eco-friendly and economical replacement for river sand with consistent grading and zero silt wastage.",
     price: 1100,
     unit: "Ton",
@@ -63,120 +120,6 @@ const PRODUCTS_DATA = [
     },
     inStock: true,
     featured: true
-  },
-  {
-    id: "fine-sand",
-    name: "Fine Plaster Sand",
-    category: "sand",
-    categoryName: "Sand & Fine Aggregates",
-    image: "assets/fine-sand.jpg",
-    shortDesc: "Best for Plastering & Brickwork. Clean, smooth mesh and silt-screened.",
-    fullDesc: "Fine mesh graded sand specially screened for internal and external wall plastering, joint mortar, bricklaying, and tile bedding. Delivers a crack-free, silky smooth surface finish.",
-    price: 1250,
-    unit: "Ton",
-    specs: {
-      "Grain Size": "0.15mm to 1.18mm",
-      "Silt Content": "< 3.5%",
-      "Grading Zone": "Zone IV (IS 383)",
-      "Best For": "Internal/External Wall Plastering & Brick Joint Mortar"
-    },
-    inStock: true,
-    featured: false
-  },
-  {
-    id: "aggregate-10mm",
-    name: "10mm Stone Aggregate",
-    category: "stone",
-    categoryName: "Coarse Stone Aggregates",
-    image: "assets/aggregate-10mm.jpg",
-    shortDesc: "Crushed blue metal aggregate for dense reinforcement, precast items & roofing.",
-    fullDesc: "Single-sized 10mm blue metal granite crushed aggregate. Essential for dense reinforcement concrete, precast slabs, pipe casting, and architectural beam manufacturing with tight rebar clearances.",
-    price: 1350,
-    unit: "Ton",
-    specs: {
-      "Size": "10mm Single Sized",
-      "Flakiness Index": "< 15%",
-      "Crushing Value": "< 20%",
-      "Best For": "Thin RCC Slabs, Precast Elements, Lintels & Roofing"
-    },
-    inStock: true,
-    featured: true
-  },
-  {
-    id: "aggregate-20mm",
-    name: "20mm Stone Aggregate",
-    category: "stone",
-    categoryName: "Coarse Stone Aggregates",
-    image: "assets/aggregate-20mm.jpg",
-    shortDesc: "Standard crushed aggregate for RCC structures, slabs, columns & foundations.",
-    fullDesc: "The most widely used coarse aggregate in structural civil engineering. Tested for flakiness and elongation index under strict IS 383 specifications. Delivers high compressive load capacity and tight interlocking.",
-    price: 1450,
-    unit: "Ton",
-    specs: {
-      "Size": "20mm Graded Nominal",
-      "Impact Value": "< 18%",
-      "Water Absorption": "< 0.8%",
-      "Best For": "Foundations, RCC Columns, Beams & Raft Slabs"
-    },
-    inStock: true,
-    featured: true
-  },
-  {
-    id: "aggregate-40mm",
-    name: "40mm Stone Aggregate",
-    category: "stone",
-    categoryName: "Coarse Stone Aggregates",
-    image: "assets/aggregate-40mm.jpg",
-    shortDesc: "Heavy-duty aggregate for mass concrete, road sub-base, and retaining walls.",
-    fullDesc: "Angular 40mm crushed basalt/granite stones. Widely utilized in mass concrete foundation rafts, industrial flooring sub-bases, dam foundations, railway track ballast, and road construction.",
-    price: 1300,
-    unit: "Ton",
-    specs: {
-      "Size": "40mm Coarse",
-      "Compressive Strength": "High Impact Resistant",
-      "Specific Gravity": "2.70+",
-      "Best For": "Mass Concrete Rafts, Road WBM, Retaining Walls"
-    },
-    inStock: true,
-    featured: false
-  },
-  {
-    id: "gsb",
-    name: "Granular Sub Base (GSB)",
-    category: "subbase",
-    categoryName: "Road Sub-Base",
-    image: "assets/gsb.jpg",
-    shortDesc: "MoRTH compliant crushed stone sub-base material for highway roadbeds.",
-    fullDesc: "Graded Granular Sub Base (GSB) and Wet Mix Macadam (WMM) conforming to MoRTH specifications. Ready for heavy roller compaction, providing solid drainage and load distribution for roads and industrial yards.",
-    price: 950,
-    unit: "Ton",
-    specs: {
-      "Grading": "MoRTH Table 400-1 Compliant",
-      "CBR Value": "> 30%",
-      "Optimum Moisture": "Pre-mixed / Quarry Grade",
-      "Best For": "Highway Sub-Bases, Factory Flooring & Parking Lots"
-    },
-    inStock: true,
-    featured: true
-  },
-  {
-    id: "zone-2",
-    name: "Zone-2 River Sand",
-    category: "sand",
-    categoryName: "Sand & Fine Aggregates",
-    image: "assets/zone-2.jpg",
-    shortDesc: "Standard IS 383 Zone-2 graded sand for general masonry and concrete work.",
-    fullDesc: "Natural alluvial river sand graded specifically to Zone II criteria. Excellent workability and low water-cement ratio requirement, ensuring high early compressive strength in concrete mixes.",
-    price: 1400,
-    unit: "Ton",
-    specs: {
-      "Grading Zone": "Zone II (IS 383)",
-      "Fineness Modulus": "2.6 - 2.9",
-      "Silt Content": "< 3.0%",
-      "Best For": "General Concrete, Flooring Mortar & Masonry"
-    },
-    inStock: true,
-    featured: false
   }
 ];
 
@@ -610,15 +553,12 @@ function checkInitialRoute() {
     if (!calcSection) return;
 
     let matchedId = null;
-    if (path.includes("20mm") || hash.includes("20mm")) matchedId = "aggregate-20mm";
-    else if (path.includes("10mm") || hash.includes("10mm")) matchedId = "aggregate-10mm";
-    else if (path.includes("40mm") || hash.includes("40mm")) matchedId = "aggregate-40mm";
+    if (path.includes("20mm") || hash.includes("20mm")) matchedId = "20mm-aggregate";
+    else if (path.includes("10mm") || hash.includes("10mm")) matchedId = "10mm-aggregate";
     else if (path.includes("banas") || path.includes("river") || hash.includes("banas")) matchedId = "banas-sand";
-    else if (path.includes("msand") || path.includes("m-sand") || hash.includes("msand")) matchedId = "msand";
     else if (path.includes("coarse") || hash.includes("coarse")) matchedId = "coarse-sand";
     else if (path.includes("fine") || path.includes("plaster") || hash.includes("fine")) matchedId = "fine-sand";
-    else if (path.includes("gsb") || hash.includes("gsb")) matchedId = "gsb";
-    else if (path.includes("zone") || hash.includes("zone")) matchedId = "zone-2";
+    else if (path.includes("msand") || path.includes("m-sand") || hash.includes("msand")) matchedId = "m-sand";
 
     if (matchedId) {
       const select = document.getElementById("calcProductSelect");
