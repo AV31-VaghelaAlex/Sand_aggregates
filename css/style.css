@@ -388,9 +388,31 @@ ul, ol {
 }
 
 .brand-logo-img {
-  height: 48px;
+  height: 52px;
+  max-height: 56px;
   width: auto;
+  max-width: 250px;
   object-fit: contain;
+  display: block;
+  transition: transform var(--transition-fast);
+}
+
+.brand:hover .brand-logo-img {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .brand-logo-img {
+    height: 42px;
+    max-width: 190px;
+  }
+}
+
+@media (max-width: 420px) {
+  .brand-logo-img {
+    height: 36px;
+    max-width: 155px;
+  }
 }
 
 .brand-info {
@@ -413,6 +435,19 @@ ul, ol {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--primary-dark);
+}
+
+/* Screen reader utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Navigation Links */
