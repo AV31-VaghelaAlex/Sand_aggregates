@@ -193,6 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initContactForm();
   initScrollReveal();
   initMaterialModal();
+  checkInitialRoute();
 });
 
 // ==========================================================================
@@ -594,4 +595,52 @@ function initScrollReveal() {
   });
 
   elements.forEach(el => observer.observe(el));
+}
+
+// ==========================================================================
+// 10. DEEP LINKING & LEGACY ROUTE HANDLER
+// ==========================================================================
+function checkInitialRoute() {
+  const path = window.location.pathname.toLowerCase();
+  const hash = window.location.hash.toLowerCase();
+
+  // If URL has /order/... or /order/20mm-aggregate/ or /products/...
+  if (path.includes("/order") || hash.includes("calculator") || hash.includes("order")) {
+    const calcSection = document.getElementById("calculator");
+    if (!calcSection) return;
+
+    let matchedId = null;
+    if (path.includes("20mm") || hash.includes("20mm")) matchedId = "aggregate-20mm";
+    else if (path.includes("10mm") || hash.includes("10mm")) matchedId = "aggregate-10mm";
+    else if (path.includes("40mm") || hash.includes("40mm")) matchedId = "aggregate-40mm";
+    else if (path.includes("banas") || path.includes("river") || hash.includes("banas")) matchedId = "banas-sand";
+    else if (path.includes("msand") || path.includes("m-sand") || hash.includes("msand")) matchedId = "msand";
+    else if (path.includes("coarse") || hash.includes("coarse")) matchedId = "coarse-sand";
+    else if (path.includes("fine") || path.includes("plaster") || hash.includes("fine")) matchedId = "fine-sand";
+    else if (path.includes("gsb") || hash.includes("gsb")) matchedId = "gsb";
+    else if (path.includes("zone") || hash.includes("zone")) matchedId = "zone-2";
+
+    if (matchedId) {
+      const select = document.getElementById("calcProductSelect");
+      if (select) {
+        select.value = matchedId;
+        select.dispatchEvent(new Event("change"));
+        const prod = PRODUCTS_DATA.find(p => p.id === matchedId);
+        if (prod) {
+          showToast("Selected Material", `${prod.name} loaded into the live calculator.`);
+        }
+      }
+    }
+
+    setTimeout(() => {
+      calcSection.scrollIntoView({ behavior: "smooth" });
+    }, 350);
+  } else if (path.includes("/products") || hash.includes("products")) {
+    const prodSection = document.getElementById("products");
+    if (prodSection) {
+      setTimeout(() => {
+        prodSection.scrollIntoView({ behavior: "smooth" });
+      }, 350);
+    }
+  }
 }

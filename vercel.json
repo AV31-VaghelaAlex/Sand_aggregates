@@ -1,10 +1,16 @@
 {
   "version": 2,
   "name": "sand-aggregates-lj-enterprise",
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/order/:match*", "destination": "/index.html" },
+    { "source": "/order", "destination": "/index.html" },
+    { "source": "/products/:match*", "destination": "/index.html" },
+    { "source": "/products", "destination": "/index.html" },
+    { "source": "/enquiry/:match*", "destination": "/index.html" },
+    { "source": "/enquiry", "destination": "/index.html" },
+    { "source": "/admin-dashboard/:match*", "destination": "/index.html" },
+    { "source": "/admin-dashboard", "destination": "/index.html" },
+    { "source": "/(.*)", "destination": "/$1" }
   ]
 }
