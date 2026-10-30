@@ -101,9 +101,8 @@ class ProductDetailView(DetailView):
         site_config = SiteSetting.get_settings()
         product_msg = (
             f"Hello, I am interested in ordering:\n\n"
-            f"Product: {product.name}\n"
-            f"Price: {product.formatted_price()} / {product.unit}\n\n"
-            f"Please share availability and delivery terms."
+            f"Product: {product.name} ({product.unit})\n\n"
+            f"Please share availability, delivery terms, and quotation."
         )
         whatsapp_product_url = f"https://wa.me/{site_config.whatsapp_number}?text={urllib.parse.quote(product_msg)}"
 
@@ -170,9 +169,8 @@ class OrderSuccessView(DetailView):
             f"Order Number: {order.order_number}\n"
             f"Customer: {order.customer_name}\n"
             f"Product: {order.product.name}\n"
-            f"Quantity: {order.quantity} {order.product.unit}\n"
-            f"Total Amount: {order.formatted_total()}\n\n"
-            f"Please confirm delivery schedule."
+            f"Quantity: {order.quantity} {order.product.unit}\n\n"
+            f"Please confirm delivery schedule and quotation."
         )
         context['whatsapp_order_url'] = f"https://wa.me/{site_config.whatsapp_number}?text={urllib.parse.quote(order_msg)}"
         return context
@@ -225,7 +223,6 @@ class AdminDashboardView(View):
         confirmed_orders = Order.objects.filter(status='Confirmed').count()
         delivered_orders = Order.objects.filter(status='Delivered').count()
         cancelled_orders = Order.objects.filter(status='Cancelled').count()
-        total_revenue = Order.objects.exclude(status='Cancelled').aggregate(Sum('total_amount'))['total_amount__sum'] or Decimal('0.00')
 
         total_enquiries = Enquiry.objects.count()
         new_enquiries = Enquiry.objects.filter(status='New').count()
@@ -257,7 +254,6 @@ class AdminDashboardView(View):
             'pending_orders': pending_orders,
             'confirmed_orders': confirmed_orders,
             'delivered_orders': delivered_orders,
-            'total_revenue': total_revenue,
             'total_enquiries': total_enquiries,
             'new_enquiries': new_enquiries,
             'recent_orders': recent_orders,

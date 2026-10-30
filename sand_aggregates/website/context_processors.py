@@ -23,7 +23,7 @@ def site_context(request):
             address = settings.SITE_DEFAULTS.get('ADDRESS', 'Highway Industrial Area, Gujarat, India')
             business_hours = settings.SITE_DEFAULTS.get('BUSINESS_HOURS', 'Mon - Sat: 8:00 AM - 7:00 PM')
             google_maps_url = settings.SITE_DEFAULTS.get('GOOGLE_MAPS_URL', '')
-            whatsapp_default_message = "Hello, I am interested in your sand and aggregates products. I would like to know the price and availability."
+            whatsapp_default_message = "Hello, I am interested in your sand and aggregates products. I would like to know the availability and delivery details."
             instagram_url = settings.SITE_DEFAULTS.get('INSTAGRAM_URL', 'https://www.instagram.com/infoljenterprise?stkn=MWd3cGN3dDV6Ym44aA==')
             linkedin_url = settings.SITE_DEFAULTS.get('LINKEDIN_URL', 'https://www.linkedin.com/company/rashienterprise')
         site_config = FakeSettings()

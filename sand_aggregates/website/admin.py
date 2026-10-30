@@ -14,9 +14,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('image_preview', 'name', 'category', 'price', 'unit', 'available', 'featured', 'updated_at')
+    list_display = ('image_preview', 'name', 'category', 'unit', 'available', 'featured', 'updated_at')
     list_display_links = ('name',)
-    list_editable = ('price', 'available', 'featured')
+    list_editable = ('available', 'featured')
     search_fields = ('name', 'short_description', 'description')
     list_filter = ('category', 'available', 'featured', 'created_at')
     prepopulated_fields = {'slug': ('name',)}
@@ -25,8 +25,8 @@ class ProductAdmin(admin.ModelAdmin):
         ('Basic Information', {
             'fields': ('name', 'slug', 'category', 'available', 'featured')
         }),
-        ('Pricing & Measurement', {
-            'fields': ('price', 'unit')
+        ('Measurement & Unit', {
+            'fields': ('unit',)
         }),
         ('Descriptions', {
             'fields': ('short_description', 'description')
@@ -61,14 +61,13 @@ class OrderAdmin(admin.ModelAdmin):
         'phone',
         'product',
         'quantity',
-        'total_amount',
         'status',
         'created_at',
     )
     list_filter = ('status', 'created_at', 'product')
     search_fields = ('order_number', 'customer_name', 'phone', 'email', 'address')
     list_editable = ('status',)
-    readonly_fields = ('order_number', 'price', 'total_amount', 'created_at', 'updated_at')
+    readonly_fields = ('order_number', 'created_at', 'updated_at')
     date_hierarchy = 'created_at'
     actions = ['mark_confirmed', 'mark_processing', 'mark_delivered', 'mark_cancelled']
 
@@ -79,8 +78,8 @@ class OrderAdmin(admin.ModelAdmin):
         ('Customer Details', {
             'fields': ('customer_name', 'phone', 'email', 'address')
         }),
-        ('Material & Financials', {
-            'fields': ('product', 'quantity', 'price', 'total_amount')
+        ('Material & Quantity', {
+            'fields': ('product', 'quantity')
         }),
         ('Additional Notes', {
             'fields': ('notes',)

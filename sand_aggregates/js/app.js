@@ -15,7 +15,6 @@ const PRODUCTS_DATA = [
     image: "assets/10mm.jpg",
     shortDesc: "Crushed stone aggregate for precast items, columns, and RCC roofing.",
     fullDesc: "Single-sized 10mm blue metal granite crushed aggregate. Essential for dense reinforcement concrete, precast slabs, pipe casting, and architectural beam manufacturing with tight rebar clearances.",
-    price: 1350,
     unit: "Ton",
     specs: {
       "Size": "10mm Single Sized",
@@ -34,7 +33,6 @@ const PRODUCTS_DATA = [
     image: "assets/20mm.jpg",
     shortDesc: "Standard crushed aggregate for RCC structures, slabs, and foundations.",
     fullDesc: "The most widely used coarse aggregate in structural civil engineering. Tested for flakiness and elongation index under strict IS 383 specifications. Delivers high compressive load capacity and tight interlocking.",
-    price: 1450,
     unit: "Ton",
     specs: {
       "Size": "20mm Graded Nominal",
@@ -53,7 +51,6 @@ const PRODUCTS_DATA = [
     image: "assets/Banas_Sand.jpeg",
     shortDesc: "High Quality, Maximum Strength. Natural river sand sourced from certified riverbeds.",
     fullDesc: "Premium natural Banas river sand sourced from certified riverbeds. Widely recognized across Gujarat for maximum load-bearing concrete and long-lasting durability in all residential and commercial builds.",
-    price: 1700,
     unit: "Ton",
     specs: {
       "Silt Content": "< 2.5%",
@@ -72,7 +69,6 @@ const PRODUCTS_DATA = [
     image: "assets/Coarse_Sand.jpg",
     shortDesc: "Stronger Concrete, Better Binding. Ideal for structural RCC columns and slabs.",
     fullDesc: "Superior quality coarse sand suitable for concrete reinforcement, structural RCC slabs, foundation columns, and high-strength load bearing members. Cleanly screened with minimal silt for superior cement bonding.",
-    price: 1350,
     unit: "Ton",
     specs: {
       "Silt Content": "< 3.0%",
@@ -91,7 +87,6 @@ const PRODUCTS_DATA = [
     image: "assets/Fine_Sand.jpg",
     shortDesc: "Best for Plastering & Brickwork. Clean and silt-screened.",
     fullDesc: "Superior quality fine sand specifically processed for plastering, brick masonry, and tile bedding. Free from organic impurities and clay lumps to deliver a smooth plaster finish with zero cracking.",
-    price: 1250,
     unit: "Ton",
     specs: {
       "Grain Size": "0.15mm to 1.18mm",
@@ -110,7 +105,6 @@ const PRODUCTS_DATA = [
     image: "assets/M-Sand.jpeg",
     shortDesc: "Manufactured sand engineered for superior concrete strength with zero silt.",
     fullDesc: "Crushed manufactured sand produced via VSI (Vertical Shaft Impactor) machines with cubic grain shape. An eco-friendly and economical replacement for river sand with consistent grading and zero silt wastage.",
-    price: 1100,
     unit: "Ton",
     specs: {
       "Silt Content": "0% Organic Silt",
@@ -132,7 +126,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavbar();
   renderProductsCatalog("all");
   initCatalogFilters();
-  initCostCalculator();
   initContactForm();
   initScrollReveal();
   initMaterialModal();
@@ -223,20 +216,16 @@ function renderProductsCatalog(category = "all") {
 
           <div class="product-price-row">
             <div>
-              <span class="product-rate">₹${product.price.toLocaleString('en-IN')}</span>
-              <span class="product-unit">/ ${product.unit} (Est.)</span>
+              <span class="product-unit"><i class="fa-solid fa-scale-balanced"></i> Unit: <strong>${product.unit}</strong></span>
             </div>
             <button type="button" class="btn btn-outline btn-sm view-specs-btn" data-product-id="${product.id}">
               <i class="fa-regular fa-file-lines"></i> Specs
             </button>
           </div>
 
-          <div class="product-actions">
-            <button type="button" class="btn btn-whatsapp btn-sm order-product-wa-btn" data-product-name="${product.name}" data-product-rate="${product.price}">
-              <i class="fa-brands fa-whatsapp"></i> Order on WhatsApp
-            </button>
-            <button type="button" class="btn btn-outline btn-sm calc-product-btn" data-product-id="${product.id}">
-              <i class="fa-solid fa-calculator"></i>
+          <div class="product-actions" style="grid-template-columns: 1fr;">
+            <button type="button" class="btn btn-whatsapp btn-sm order-product-wa-btn" data-product-name="${product.name}">
+              <i class="fa-brands fa-whatsapp"></i> Inquire / Order on WhatsApp
             </button>
           </div>
         </div>
@@ -265,28 +254,13 @@ function attachProductCardEvents() {
   document.querySelectorAll(".order-product-wa-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const name = btn.getAttribute("data-product-name");
-      const rate = btn.getAttribute("data-product-rate");
       const message = `*Inquiry / Material Order from Website*\n\n` +
                       `Hello LJ Enterprise,\n` +
                       `I am interested in ordering:\n` +
-                      `• *Material:* ${name}\n` +
-                      `• *Estimated Rate:* ₹${rate} / Ton\n\n` +
-                      `Please share dispatch availability, dumper freight, and current site delivery rates.`;
+                      `• *Material:* ${name}\n\n` +
+                      `Please share dispatch availability, delivery terms, and current quotation.`;
       
       openWhatsApp(message);
-    });
-  });
-
-  // Jump to calculator with selected product
-  document.querySelectorAll(".calc-product-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-product-id");
-      const calcSelect = document.getElementById("calcProductSelect");
-      if (calcSelect) {
-        calcSelect.value = id;
-        calcSelect.dispatchEvent(new Event("change"));
-        document.getElementById("calculator").scrollIntoView({ behavior: "smooth" });
-      }
     });
   });
 
@@ -300,92 +274,7 @@ function attachProductCardEvents() {
 }
 
 // ==========================================================================
-// 5. INTERACTIVE LIVE MATERIAL COST CALCULATOR
-// ==========================================================================
-function initCostCalculator() {
-  const select = document.getElementById("calcProductSelect");
-  const qtyInput = document.getElementById("calcQtyInput");
-  const qtyRange = document.getElementById("calcQtyRange");
-  const locationInput = document.getElementById("calcLocationInput");
-
-  const rateDisplay = document.getElementById("calcUnitRateDisplay");
-  const qtyDisplay = document.getElementById("calcQtyDisplay");
-  const totalDisplay = document.getElementById("calcTotalDisplay");
-  const truckCountDisplay = document.getElementById("calcTruckCountDisplay");
-  const sendWaBtn = document.getElementById("calcSendWhatsAppBtn");
-
-  if (!select || !qtyInput) return;
-
-  // Populate product dropdown options
-  select.innerHTML = PRODUCTS_DATA.map(p => `
-    <option value="${p.id}" data-price="${p.price}" data-unit="${p.unit}">
-      ${p.name} — ₹${p.price.toLocaleString('en-IN')}/${p.unit}
-    </option>
-  `).join("");
-
-  function updateCalculator() {
-    const selectedOption = select.options[select.selectedIndex];
-    const unitPrice = parseFloat(selectedOption.getAttribute("data-price") || 0);
-    const unit = selectedOption.getAttribute("data-unit") || "Ton";
-    const quantity = parseFloat(qtyInput.value) || 0;
-
-    const total = quantity * unitPrice;
-    const approxTrucks = Math.max(1, Math.ceil(quantity / 25)); // ~25 tons per 10-wheeler dumper
-
-    if (rateDisplay) rateDisplay.textContent = `₹${unitPrice.toLocaleString('en-IN')} / ${unit}`;
-    if (qtyDisplay) qtyDisplay.textContent = `${quantity} ${unit}s`;
-    if (totalDisplay) totalDisplay.textContent = `₹${total.toLocaleString('en-IN')}`;
-    if (truckCountDisplay) truckCountDisplay.textContent = `${approxTrucks} Dumper(s) (approx. 25-30T each)`;
-  }
-
-  // Sync range and number input
-  qtyInput.addEventListener("input", () => {
-    if (qtyRange) qtyRange.value = qtyInput.value;
-    updateCalculator();
-  });
-
-  if (qtyRange) {
-    qtyRange.addEventListener("input", () => {
-      qtyInput.value = qtyRange.value;
-      updateCalculator();
-    });
-  }
-
-  select.addEventListener("change", updateCalculator);
-
-  // Initial calculation run
-  updateCalculator();
-
-  // Send Order via WhatsApp action
-  if (sendWaBtn) {
-    sendWaBtn.addEventListener("click", () => {
-      const selectedOption = select.options[select.selectedIndex];
-      const prodName = selectedOption.text.split("—")[0].trim();
-      const unitPrice = parseFloat(selectedOption.getAttribute("data-price") || 0);
-      const unit = selectedOption.getAttribute("data-unit") || "Ton";
-      const quantity = qtyInput.value;
-      const total = (parseFloat(quantity) * unitPrice).toLocaleString('en-IN');
-      const location = locationInput && locationInput.value.trim() ? locationInput.value.trim() : "Ahmedabad / Gujarat site";
-      const trucks = Math.max(1, Math.ceil(parseFloat(quantity) / 25));
-
-      const message = `*Material Order Estimate via Website Calculator*\n\n` +
-                      `Hello LJ Enterprise,\n` +
-                      `I calculated an order on your website:\n` +
-                      `• *Material:* ${prodName}\n` +
-                      `• *Required Quantity:* ${quantity} ${unit}\n` +
-                      `• *Estimated Unit Rate:* ₹${unitPrice.toLocaleString('en-IN')} / ${unit}\n` +
-                      `• *Estimated Material Value:* ₹${total}\n` +
-                      `• *Estimated Dumpers:* ${trucks} Truck Loads\n` +
-                      `• *Site Location:* ${location}\n\n` +
-                      `Please confirm order booking, delivery schedule, and invoice details.`;
-
-      openWhatsApp(message);
-    });
-  }
-}
-
-// ==========================================================================
-// 6. CONTACT & ENQUIRY FORM (Zero-Database WhatsApp & Mailto Submission)
+// 5. CONTACT & ENQUIRY FORM (Zero-Database WhatsApp & Mailto Submission)
 // ==========================================================================
 function initContactForm() {
   const form = document.getElementById("enquiryForm");
@@ -394,7 +283,7 @@ function initContactForm() {
   // Populate enquiry form material options
   if (materialSelect) {
     materialSelect.innerHTML = `<option value="">Select Material Needed...</option>` +
-      PRODUCTS_DATA.map(p => `<option value="${p.name}">${p.name} (₹${p.price}/${p.unit})</option>`).join("") +
+      PRODUCTS_DATA.map(p => `<option value="${p.name}">${p.name} (per ${p.unit})</option>`).join("") +
       `<option value="Multiple Materials">Multiple Materials / Bulk Supply</option>` +
       `<option value="Other / Special Requirement">Other / Custom Requirement</option>`;
   }
@@ -410,7 +299,7 @@ function initContactForm() {
       const material = materialSelect.value || "Not specified";
       const quantity = document.getElementById("fQuantity").value.trim() || "Unspecified";
       const location = document.getElementById("fLocation").value.trim() || "Ahmedabad & nearby";
-      const messageText = document.getElementById("fMessage").value.trim() || "Please call back with material prices.";
+      const messageText = document.getElementById("fMessage").value.trim() || "Please contact with material availability and quotation.";
 
       if (!name || !phone) {
         alert("Please provide both your name and phone number.");
@@ -486,7 +375,7 @@ function showProductModal(productId) {
     waBtn.onclick = () => {
       const msg = `*Inquiry for ${product.name}*\n\n` +
                   `Hello LJ Enterprise,\n` +
-                  `I checked the specifications for ${product.name} (₹${product.price}/${product.unit}) on your website. Please provide availability and rate for delivery.`;
+                  `I checked the specifications for ${product.name} (${product.unit}) on your website. Please provide availability and rate for delivery.`;
       openWhatsApp(msg);
     };
   }
@@ -495,7 +384,7 @@ function showProductModal(productId) {
 }
 
 // ==========================================================================
-// 8. WHATSAPP & TOAST UTILITIES
+// 7. WHATSAPP & TOAST UTILITIES
 // ==========================================================================
 function openWhatsApp(textMessage) {
   const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(textMessage)}`;
@@ -520,7 +409,7 @@ function showToast(title, subtitle) {
 }
 
 // ==========================================================================
-// 9. SCROLL REVEAL ANIMATIONS
+// 8. SCROLL REVEAL ANIMATIONS
 // ==========================================================================
 function initScrollReveal() {
   const elements = document.querySelectorAll(".fade-up");
@@ -541,41 +430,13 @@ function initScrollReveal() {
 }
 
 // ==========================================================================
-// 10. DEEP LINKING & LEGACY ROUTE HANDLER
+// 9. DEEP LINKING & ROUTE HANDLER
 // ==========================================================================
 function checkInitialRoute() {
   const path = window.location.pathname.toLowerCase();
   const hash = window.location.hash.toLowerCase();
 
-  // If URL has /order/... or /order/20mm-aggregate/ or /products/...
-  if (path.includes("/order") || hash.includes("calculator") || hash.includes("order")) {
-    const calcSection = document.getElementById("calculator");
-    if (!calcSection) return;
-
-    let matchedId = null;
-    if (path.includes("20mm") || hash.includes("20mm")) matchedId = "20mm-aggregate";
-    else if (path.includes("10mm") || hash.includes("10mm")) matchedId = "10mm-aggregate";
-    else if (path.includes("banas") || path.includes("river") || hash.includes("banas")) matchedId = "banas-sand";
-    else if (path.includes("coarse") || hash.includes("coarse")) matchedId = "coarse-sand";
-    else if (path.includes("fine") || path.includes("plaster") || hash.includes("fine")) matchedId = "fine-sand";
-    else if (path.includes("msand") || path.includes("m-sand") || hash.includes("msand")) matchedId = "m-sand";
-
-    if (matchedId) {
-      const select = document.getElementById("calcProductSelect");
-      if (select) {
-        select.value = matchedId;
-        select.dispatchEvent(new Event("change"));
-        const prod = PRODUCTS_DATA.find(p => p.id === matchedId);
-        if (prod) {
-          showToast("Selected Material", `${prod.name} loaded into the live calculator.`);
-        }
-      }
-    }
-
-    setTimeout(() => {
-      calcSection.scrollIntoView({ behavior: "smooth" });
-    }, 350);
-  } else if (path.includes("/products") || hash.includes("products")) {
+  if (path.includes("/order") || hash.includes("order") || path.includes("/products") || hash.includes("products")) {
     const prodSection = document.getElementById("products");
     if (prodSection) {
       setTimeout(() => {

@@ -54,16 +54,15 @@
           {{ product.short_description }}
         </p>
 
-        <!-- Pricing Highlight Box -->
+        <!-- Supply Highlight Box -->
         <div class="detail-price-box">
           <div>
-            <span style="font-size: 0.88rem; color: var(--stone); display: block;">Wholesale Rate</span>
-            <span class="detail-price">{{ product.formatted_price }}</span>
-            <span style="font-size: 0.95rem; color: var(--stone); font-weight: 600;">/ {{ product.unit }}</span>
+            <span style="font-size: 0.88rem; color: var(--stone); display: block;">Measurement Unit</span>
+            <span class="detail-price" style="font-size: 1.35rem;">Per {{ product.unit }}</span>
           </div>
           <div style="text-align: right;">
-            <span style="font-size: 0.8rem; color: var(--stone); display: block;">Minimum Order</span>
-            <strong style="font-size: 0.95rem;">1 {{ product.unit }} (Bulk discounts available)</strong>
+            <span style="font-size: 0.8rem; color: var(--stone); display: block;">Dispatch &amp; Pricing</span>
+            <strong style="font-size: 0.95rem; color: var(--accent);">Direct Quarry Quotation</strong>
           </div>
         </div>
 
@@ -116,8 +115,8 @@
               <h3><a href="{{ rel.get_absolute_url }}">{{ rel.name }}</a></h3>
               <p>{{ rel.short_description }}</p>
               <div class="product-price-bar">
-                <span class="price-tag">{{ rel.formatted_price }}</span>
-                <span class="price-unit">per {{ rel.unit }}</span>
+                <span class="price-unit"><i class="fa-solid fa-scale-balanced"></i> Unit: <strong>{{ rel.unit }}</strong></span>
+                <span class="price-unit" style="color: var(--accent); font-weight: 600;">Custom Quote</span>
               </div>
               <a href="{{ rel.get_absolute_url }}" class="btn btn-outline btn-sm btn-block">View Details</a>
             </div>

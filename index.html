@@ -48,7 +48,6 @@
         <ul class="nav-list">
           <li><a href="#home" class="nav-link active">Home</a></li>
           <li><a href="#products" class="nav-link">Materials</a></li>
-          <li><a href="#calculator" class="nav-link">Calculator</a></li>
           <li><a href="#services" class="nav-link">Services</a></li>
           <li><a href="#why-us" class="nav-link">Why Us</a></li>
           <li><a href="#about" class="nav-link">About</a></li>
@@ -83,7 +82,6 @@
     <ul class="mobile-nav-list">
       <li><a href="#home" class="mobile-nav-link">Home <i class="fa-solid fa-chevron-right"></i></a></li>
       <li><a href="#products" class="mobile-nav-link">Materials Catalog <i class="fa-solid fa-chevron-right"></i></a></li>
-      <li><a href="#calculator" class="mobile-nav-link">Cost Calculator <i class="fa-solid fa-chevron-right"></i></a></li>
       <li><a href="#services" class="mobile-nav-link">Supply Services <i class="fa-solid fa-chevron-right"></i></a></li>
       <li><a href="#why-us" class="mobile-nav-link">Why Choose Us <i class="fa-solid fa-chevron-right"></i></a></li>
       <li><a href="#about" class="mobile-nav-link">About Us <i class="fa-solid fa-chevron-right"></i></a></li>
@@ -120,8 +118,8 @@
             </p>
 
             <div class="hero-actions">
-              <a href="#calculator" class="btn btn-primary btn-lg">
-                <i class="fa-solid fa-calculator"></i> Calculate Cost &amp; Order
+              <a href="#products" class="btn btn-primary btn-lg">
+                <i class="fa-solid fa-cubes"></i> Browse Materials
               </a>
               <a href="https://wa.me/918141352886?text=Hello%2C%20I%20need%20a%20material%20quote%20for%20my%20construction%20project." target="_blank" rel="noopener" class="btn btn-whatsapp btn-lg">
                 <i class="fa-brands fa-whatsapp"></i> WhatsApp Us
@@ -240,95 +238,7 @@
     </section>
 
     <!-- ==========================================================================
-         5. INTERACTIVE LIVE MATERIAL COST CALCULATOR (Zero-Database Feature)
-         ========================================================================== -->
-    <section class="section section-alt" id="calculator">
-      <div class="container">
-        <div class="section-header fade-up">
-          <span class="section-kicker">
-            <i class="fa-solid fa-calculator"></i> Live Cost Estimator
-          </span>
-          <h2 class="section-title">Calculate Material Cost &amp; Order Online</h2>
-          <p class="section-subtitle">
-            Get an instant estimate for your construction site. Select your material and required tonnage to generate a pre-formatted WhatsApp order in one click.
-          </p>
-        </div>
-
-        <div class="calculator-box fade-up">
-          <div class="calc-grid">
-            <!-- Inputs -->
-            <div class="calc-inputs">
-              <div class="form-group">
-                <label for="calcProductSelect" class="form-label">
-                  <span>Select Construction Material</span>
-                  <span class="sub">Wholesale rate</span>
-                </label>
-                <select id="calcProductSelect" class="form-select" aria-label="Select Material">
-                  <!-- Populated by JS -->
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="calcQtyInput" class="form-label">
-                  <span>Required Quantity (Tons)</span>
-                  <span class="sub">1 Dumper ≈ 25 - 30 Tons</span>
-                </label>
-                <input type="number" id="calcQtyInput" class="form-control" value="30" min="5" max="1000" step="5">
-                <input type="range" id="calcQtyRange" class="form-range" value="30" min="10" max="250" step="5" aria-label="Adjust quantity slider">
-              </div>
-
-              <div class="form-group">
-                <label for="calcLocationInput" class="form-label">
-                  <span>Site Delivery Location / Landmark</span>
-                  <span class="sub">Ahmedabad, Sanand, Gandhinagar, etc.</span>
-                </label>
-                <input type="text" id="calcLocationInput" class="form-control" placeholder="e.g. SP Ring Road, Bopal, Changodar, Sanand">
-              </div>
-            </div>
-
-            <!-- Summary Output Card -->
-            <div class="calc-summary-card">
-              <div>
-                <h3 class="calc-summary-title">
-                  <i class="fa-solid fa-receipt"></i> Order Estimate Summary
-                </h3>
-
-                <div class="summary-rows">
-                  <div class="summary-row">
-                    <span>Estimated Unit Rate:</span>
-                    <strong id="calcUnitRateDisplay" style="color:var(--white);">₹1,350 / Ton</strong>
-                  </div>
-                  <div class="summary-row">
-                    <span>Selected Quantity:</span>
-                    <strong id="calcQtyDisplay" style="color:var(--white);">30 Tons</strong>
-                  </div>
-                  <div class="summary-row">
-                    <span>Estimated Transit:</span>
-                    <strong id="calcTruckCountDisplay" style="color:var(--primary);">1 Dumper (25-30T)</strong>
-                  </div>
-                  <div class="summary-row total">
-                    <span>Estimated Material Value:</span>
-                    <span class="price-val" id="calcTotalDisplay">₹40,500</span>
-                  </div>
-                </div>
-
-                <div class="calc-truck-notice">
-                  <i class="fa-solid fa-circle-info" style="color:var(--primary); margin-right:4px;"></i>
-                  Direct quarry rate snapshot. Delivery freight is finalized based on exact site km from our Ahmedabad yard.
-                </div>
-              </div>
-
-              <button type="button" class="btn btn-whatsapp btn-lg btn-block" id="calcSendWhatsAppBtn">
-                <i class="fa-brands fa-whatsapp"></i> Book Order via WhatsApp
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-         6. SERVICES & SUPPLY CAPABILITIES
+         5. SERVICES & SUPPLY CAPABILITIES
          ========================================================================== -->
     <section class="section" id="services">
       <div class="container">
@@ -746,7 +656,6 @@
           <ul class="footer-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#products">Material Catalog</a></li>
-            <li><a href="#calculator">Cost Calculator</a></li>
             <li><a href="#services">Supply Services</a></li>
             <li><a href="#why-us">Why Choose Us</a></li>
             <li><a href="#about">About LJ Enterprise</a></li>

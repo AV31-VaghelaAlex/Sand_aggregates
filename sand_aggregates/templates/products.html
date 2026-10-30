@@ -77,8 +77,8 @@
             <p>{{ product.short_description }}</p>
             
             <div class="product-price-bar">
-              <span class="price-tag">{{ product.formatted_price }}</span>
-              <span class="price-unit">per {{ product.unit }}</span>
+              <span class="price-unit"><i class="fa-solid fa-scale-balanced"></i> Unit: <strong>{{ product.unit }}</strong></span>
+              <span class="price-unit" style="color: var(--accent); font-weight: 600;">Custom Quote</span>
             </div>
 
             <div style="margin-bottom: 12px;">

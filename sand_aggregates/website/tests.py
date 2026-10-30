@@ -30,7 +30,6 @@ class SandAggregatesModelTests(TestCase):
             category=self.category,
             short_description="Crushed stone aggregate",
             description="High quality 20mm aggregate for structural casting.",
-            price=Decimal('1500.00'),
             unit="Ton",
             available=True,
             featured=True
@@ -39,11 +38,11 @@ class SandAggregatesModelTests(TestCase):
     def test_category_slug_generation(self):
         self.assertEqual(self.category.slug, "sand-fine-aggregates")
 
-    def test_product_slug_and_formatting(self):
+    def test_product_slug_and_str(self):
         self.assertEqual(self.product.slug, "20mm-aggregate")
-        self.assertEqual(self.product.formatted_price(), "₹1,500.00")
+        self.assertEqual(str(self.product), "20mm Aggregate (Ton)")
 
-    def test_order_creation_and_calculation(self):
+    def test_order_creation(self):
         order = Order.objects.create(
             customer_name="John Doe",
             email="john@example.com",
@@ -52,10 +51,6 @@ class SandAggregatesModelTests(TestCase):
             product=self.product,
             quantity=Decimal('10.00')
         )
-        # Price must snapshot product price (1500.00)
-        self.assertEqual(order.price, Decimal('1500.00'))
-        # Total amount must be 1500 * 10 = 15000.00
-        self.assertEqual(order.total_amount, Decimal('15000.00'))
         # Order number must be generated
         self.assertTrue(order.order_number.startswith("ORD-"))
         self.assertEqual(order.status, "Pending")
@@ -88,7 +83,6 @@ class SandAggregatesViewTests(TestCase):
             category=self.category,
             short_description="10mm crushed stone",
             description="Precast construction aggregate.",
-            price=Decimal('1350.00'),
             unit="Ton",
             available=True,
             featured=True
@@ -103,7 +97,6 @@ class SandAggregatesViewTests(TestCase):
         response = self.client.get(reverse('website:home'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "10mm Aggregate")
-        self.assertContains(response, "₹1,350.00")
 
     def test_products_list_view(self):
         response = self.client.get(reverse('website:products'))
@@ -137,7 +130,6 @@ class SandAggregatesViewTests(TestCase):
         # Verify order exists
         order = Order.objects.get(customer_name='Ramesh Kumar')
         self.assertEqual(order.quantity, Decimal('15.0'))
-        self.assertEqual(order.total_amount, Decimal('20250.00')) # 1350 * 15
 
         # Test Order Success page
         success_response = self.client.get(reverse('website:order_success', kwargs={'order_number': order.order_number}))

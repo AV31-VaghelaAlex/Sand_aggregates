@@ -57,11 +57,6 @@ class Product(models.Model):
     description = models.TextField(
         help_text="Detailed specification, uses, grading, and material properties"
     )
-    price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        help_text="Price per unit in INR (₹)"
-    )
     unit = models.CharField(
         max_length=50,
         choices=UNIT_CHOICES,
@@ -89,11 +84,8 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('website:product_detail', kwargs={'slug': self.slug})
 
-    def formatted_price(self):
-        return f"₹{self.price:,.2f}"
-
     def __str__(self):
-        return f"{self.name} - ₹{self.price}/{self.unit}"
+        return f"{self.name} ({self.unit})"
 
 
 class Order(models.Model):
@@ -121,18 +113,6 @@ class Order(models.Model):
         default=1.00,
         help_text="Quantity in product units"
     )
-    price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        editable=False,
-        help_text="Unit price snapshot at order submission"
-    )
-    total_amount = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        editable=False,
-        help_text="Calculated: price * quantity"
-    )
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -149,12 +129,6 @@ class Order(models.Model):
         ordering = ['-created_at']
 
     def save(self, *args, **kwargs):
-        # Snapshot product unit price and calculate total
-        if self.product:
-            if not self.price:
-                self.price = self.product.price
-            self.total_amount = Decimal(str(self.price)) * Decimal(str(self.quantity))
-
         # Generate unique order number if empty
         if not self.order_number:
             year = datetime.now().year
@@ -164,9 +138,6 @@ class Order(models.Model):
             self.order_number = f"ORD-{year}-{next_num:04d}"
 
         super().save(*args, **kwargs)
-
-    def formatted_total(self):
-        return f"₹{self.total_amount:,.2f}"
 
     def __str__(self):
         return f"{self.order_number} - {self.customer_name} ({self.status})"
@@ -225,7 +196,7 @@ class SiteSetting(models.Model):
     business_hours = models.CharField(max_length=100, default="Open 24 hours")
     google_maps_url = models.URLField(max_length=500, default="https://www.google.com/maps?q=Ahmedabad,Gujarat,India&output=embed")
     whatsapp_default_message = models.TextField(
-        default="Hello LJ Enterprise, I am interested in your sand, GSB, and aggregates materials. Please share pricing and availability."
+        default="Hello LJ Enterprise, I am interested in your sand, GSB, and aggregates materials. Please share material details and availability."
     )
     # Social links
     instagram_url = models.URLField(default="https://www.instagram.com/infoljenterprise?stkn=MWd3cGN3dDV6Ym44aA==", blank=True)

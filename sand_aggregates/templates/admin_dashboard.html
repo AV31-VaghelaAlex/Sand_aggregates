@@ -46,9 +46,9 @@
       </div>
 
       <div class="dash-metric-card green">
-        <div class="metric-title"><i class="fa-solid fa-indian-rupee-sign"></i> Total Order Value</div>
-        <div class="metric-value">₹{{ total_revenue|floatformat:0 }}</div>
-        <small style="color: var(--stone);">Excludes cancelled orders</small>
+        <div class="metric-title"><i class="fa-solid fa-comments"></i> Total Enquiries</div>
+        <div class="metric-value">{{ total_enquiries }}</div>
+        <small style="color: var(--success); font-weight: 600;">{{ new_enquiries }} new enquiries</small>
       </div>
     </div>
 
@@ -87,7 +87,7 @@
                 <th>Order #</th>
                 <th>Customer</th>
                 <th>Product</th>
-                <th>Total</th>
+                <th>Quantity</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -100,8 +100,8 @@
                     </a>
                   </td>
                   <td>{{ ord.customer_name }}</td>
-                  <td>{{ ord.product.name }} ({{ ord.quantity }} {{ ord.product.unit }})</td>
-                  <td><strong>{{ ord.formatted_total }}</strong></td>
+                  <td>{{ ord.product.name }}</td>
+                  <td><strong>{{ ord.quantity }} {{ ord.product.unit }}</strong></td>
                   <td>
                     <span class="badge-status {{ ord.status|lower }}">{{ ord.status }}</span>
                   </td>

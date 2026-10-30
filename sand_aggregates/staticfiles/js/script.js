@@ -1,14 +1,13 @@
 /* =========================================================
    Apex Sand & Aggregates — Interactive Client Script
    Preserves original mobile menu, scroll reveal & enquiry links
-   Adds live price computation for the ordering system
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
   initNav();
   initScrollReveal();
   initEnquireButtons();
-  initOrderCalculator();
+  initOrderSummary();
   initAlertDismissal();
 });
 
@@ -69,40 +68,36 @@ function setSelectValue(selectEl, value) {
   }
 }
 
-/* ---------- Interactive Order Form Price & Total Calculator ---------- */
-function initOrderCalculator() {
+/* ---------- Order Form Live Summary Update ---------- */
+function initOrderSummary() {
   const productSelect = document.getElementById("order-product-select");
   const quantityInput = document.getElementById("order-quantity-input");
-  const unitPriceDisplay = document.getElementById("order-unit-price-display");
+  const materialDisplay = document.getElementById("order-material-display");
   const quantityDisplay = document.getElementById("order-quantity-display");
-  const totalAmountDisplay = document.getElementById("order-total-amount-display");
   const unitDisplay = document.getElementById("order-unit-display");
 
   if (!productSelect || !quantityInput) return;
 
-  function recalculate() {
+  function updateSummary() {
     const selectedOption = productSelect.options[productSelect.selectedIndex];
     if (!selectedOption || !selectedOption.value) {
-      if (unitPriceDisplay) unitPriceDisplay.textContent = "₹0.00";
+      if (materialDisplay) materialDisplay.textContent = "Choose material";
       if (quantityDisplay) quantityDisplay.textContent = "0";
-      if (totalAmountDisplay) totalAmountDisplay.textContent = "₹0.00";
       return;
     }
 
-    const price = parseFloat(selectedOption.getAttribute("data-price") || 0);
     const unit = selectedOption.getAttribute("data-unit") || "Ton";
+    const name = selectedOption.getAttribute("data-name") || selectedOption.textContent.trim();
     const qty = parseFloat(quantityInput.value) || 0;
-    const total = price * qty;
 
-    if (unitPriceDisplay) unitPriceDisplay.textContent = `₹${price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (materialDisplay) materialDisplay.textContent = name;
     if (quantityDisplay) quantityDisplay.textContent = `${qty} ${unit}`;
     if (unitDisplay) unitDisplay.textContent = unit;
-    if (totalAmountDisplay) totalAmountDisplay.textContent = `₹${total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
 
-  productSelect.addEventListener("change", recalculate);
-  quantityInput.addEventListener("input", recalculate);
-  recalculate();
+  productSelect.addEventListener("change", updateSummary);
+  quantityInput.addEventListener("input", updateSummary);
+  updateSummary();
 }
 
 /* ---------- Subtle scroll reveal ---------- */
